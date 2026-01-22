@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild
+.cxx
+
+# Keystore
+*.jks
+*.keystore
+
+# Logs
+*.log
+
+# Output
+/out/
+
+.env
+
+.gradle-user-home
+.gradle/
+
+./maplibra_web
+maplibra_web
+
+data
+data_map
