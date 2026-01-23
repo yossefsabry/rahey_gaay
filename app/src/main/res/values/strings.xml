@@ -1,4 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rahey-Gaay</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_support">Support</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_more">More</string>
+
+    <!-- Common -->
+    <string name="common_search">Search</string>
+    <string name="common_search_placeholder">Where do you need delivery?</string>
+    <string name="common_age">Age %1$s</string>
+    <string name="common_verified">VERIFIED</string>
+    <string name="common_trusted">TRUSTED</string>
+    <string name="common_active_now">Active Now</string>
+    <string name="common_origin">Origin</string>
+    <string name="common_destination">Destination</string>
+    <string name="common_traveling_tomorrow">Traveling Tomorrow</string>
+    <string name="common_departure_time">Departure around 09:00 AM</string>
+    <string name="common_contact_name">Contact %1$s</string>
+    <string name="common_view_all">View All</string>
+
+    <!-- Home -->
+    <string name="home_tagline_title">Connect.\nTravel. Deliver.</string>
+    <string name="home_tagline_description">Join Egypts largest peer-to-peer delivery network and connect with trusted travelers.</string>
+    <string name="home_feature_verified_title">Verified Users</string>
+    <string name="home_feature_verified_subtitle">ID-verified travelers you can trust</string>
+    <string name="home_feature_rated_title">Rated System</string>
+    <string name="home_feature_rated_subtitle">Public ratings for peace of mind</string>
+    <string name="home_feature_fast_title">Fast Delivery</string>
+    <string name="home_feature_fast_subtitle">Same-day delivery across cities</string>
+    <string name="home_discover_title">Discover Egypt with %1$s</string>
+    <string name="home_discover_description">Connect with travelers, save on delivery fees, and enjoy a trusted experience wherever you go.</string>
+    <string name="home_discover_cta">Start Exploring</string>
+    <string name="home_stats_active_users">Active Users</string>
+    <string name="home_stats_deliveries_today">Deliveries Today</string>
+    <string name="home_live_connections">Live Connections</string>
+    <string name="home_live_connections_footer">REAL-TIME CONNECTIONS ACROSS EGYPT</string>
+    <string name="home_live_connections_live">Live</string>
+    <string name="home_featured_title">Featured Travelers</string>
+    <string name="home_featured_subtitle">Top-rated travelers currently available</string>
+    <string name="home_featured_see_all">See All</string>
+    <string name="home_featured_view_all">View all travelers</string>
+    <string name="home_rating_count">(%1$s reviews)</string>
+    <string name="home_route_cairo_alex">Cairo → Alexandria</string>
+    <string name="home_route_alex_cairo">Alexandria → Cairo</string>
+    <string name="route_giza_hurghada">Giza → Hurghada</string>
+    <string name="home_note_ahmed">Heading to Alexandria this weekend and happy to carry small packages!</string>
+    <string name="home_note_fatma">Returning to Cairo on Sunday. On-time and your package is safe.</string>
+    <string name="home_how_it_works_title">How %1$s Works</string>
+    <string name="home_how_it_works_subtitle">Simple, safe, and reliable peer-to-peer delivery</string>
+    <string name="home_step_search_title">1. Search</string>
+    <string name="home_step_search_desc">Find verified travelers heading to your destination using our map or search.</string>
+    <string name="home_step_connect_title">2. Connect</string>
+    <string name="home_step_connect_desc">Contact travelers directly to arrange pickup and delivery details.</string>
+    <string name="home_step_deliver_title">3. Deliver</string>
+    <string name="home_step_deliver_desc">Your package travels safely with trusted, rated community members.</string>
+    <string name="home_why_choose_title">Why Choose %1$s?</string>
+    <string name="home_reason_trusted_title">Trusted Community</string>
+    <string name="home_reason_trusted_desc">All travelers are ID-verified and rated by the community for your peace of mind.</string>
+    <string name="home_reason_flexible_title">Flexible &amp; Fast</string>
+    <string name="home_reason_flexible_desc">Find travelers heading to your destination at any time, for quick and flexible delivery.</string>
+    <string name="home_reason_affordable_title">Affordable</string>
+    <string name="home_reason_affordable_desc">Save money compared to traditional couriers by connecting directly with travelers.</string>
+
+    <!-- Map -->
+    <string name="map_origin_value">Cairo, EG</string>
+    <string name="map_destination_value">Alexandria, EG</string>
+    <string name="map_traveler_description">Friendly guy heading to Alex for the weekend. Happy to help with small packages or documents! Traveling by car.</string>
+
+    <!-- Support -->
+    <string name="support_title">Support &amp; Chat</string>
+    <string name="support_help_center_title">Help Center</string>
+    <string name="support_help_center_subtitle">Find quick answers to your questions</string>
+    <string name="support_tab_chats">Chats</string>
+    <string name="support_tab_tickets">Tickets</string>
+    <string name="support_active_chats_title">Active Conversations</string>
+    <string name="support_new_count">%1$d new</string>
+    <string name="support_chat_ahmed_message">Hello, can I pick up the package tomorrow?</string>
+    <string name="support_chat_ahmed_time">2 min ago</string>
+    <string name="support_chat_ahmed_tag">Cairo ← Alexandria</string>
+    <string name="support_support_team_name">Rahey-Gaay Support Team</string>
+    <string name="support_support_team_message">We are reviewing your request #4920...</string>
+    <string name="support_support_team_time">10:45 AM</string>
+    <string name="support_chat_fatma_message">Delivery completed successfully, thank you!</string>
+    <string name="support_chat_fatma_time">Yesterday</string>
+    <string name="support_chat_fatma_tag">Completed</string>
+    <string name="support_chat_omar_message">Can you send a photo of the contents?</string>
+    <string name="support_chat_omar_time">Monday</string>
+
+    <!-- Auth -->
+    <string name="auth_tagline">Connect. Travel. Deliver.</string>
+    <string name="auth_tab_login">Login</string>
+    <string name="auth_tab_signup">Sign Up</string>
+    <string name="auth_label_email">Email Address</string>
+    <string name="auth_label_password">Password</string>
+    <string name="auth_label_full_name">Full Name</string>
+    <string name="auth_label_create_password">Create Password</string>
+    <string name="auth_placeholder_email">name@example.com</string>
+    <string name="auth_placeholder_password">••••••••</string>
+    <string name="auth_placeholder_name">John Doe</string>
+    <string name="auth_button_sign_in">Sign In</string>
+    <string name="auth_button_create_account">Create Account</string>
+    <string name="auth_or_continue">Or continue with</string>
+    <string name="auth_google">Google</string>
+    <string name="auth_facebook">Facebook</string>
+    <string name="auth_terms_line">By joining, you agree to our Terms of Service and Privacy Policy.</string>
+    <string name="auth_terms_title">Terms of Service</string>
+    <string name="auth_privacy_title">Privacy Policy</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_header_subtitle">Account overview &amp; safety</string>
+    <string name="profile_subtitle">Traveler &amp; Sender • Cairo, Egypt</string>
+    <string name="profile_description">Focused on safe, on-time deliveries and clear communication with senders.</string>
+    <string name="profile_edit_button">Edit Profile</string>
+    <string name="profile_review_count">(124 reviews)</string>
+    <string name="profile_verification_title">Verification Status</string>
+    <string name="profile_verify_phone_title">Phone number</string>
+    <string name="profile_verify_phone_subtitle">Verified via SMS confirmation</string>
+    <string name="profile_verify_social_title">Social account</string>
+    <string name="profile_verify_social_subtitle">Trusted social profile linked</string>
+    <string name="profile_verify_identity_title">Identity check</string>
+    <string name="profile_verify_identity_subtitle">Government ID verified</string>
+    <string name="profile_verified_badge">Verified</string>
+    <string name="profile_active_trips_label">Active Trips</string>
+    <string name="profile_deliveries_label">Deliveries</string>
+    <string name="profile_trip_departure">Departure: 06:00 PM</string>
+    <string name="profile_trip_space">Space: Small packages</string>
+    <string name="profile_trip_today">Today</string>
+    <string name="profile_trip_date">Nov 24</string>
+    <string name="profile_completed_deliveries_title">Completed Deliveries</string>
+    <string name="profile_payout_methods">Payout Methods</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_delivery_laptop">Delivered Laptop • 2 days ago</string>
+    <string name="profile_delivery_documents">Delivered Documents • 1 week ago</string>
+
+    <!-- Other Profile -->
+    <string name="other_profile_title">Profile</string>
+    <string name="other_profile_member_since">Member since 2023 • Age 28</string>
+    <string name="other_profile_rating_count">(45 reviews)</string>
+    <string name="other_profile_trips_label">Trips</string>
+    <string name="other_profile_deliveries_label">Deliveries</string>
+    <string name="other_profile_next_trip_title">Next Trip</string>
+    <string name="other_profile_active_now">Active Now</string>
+    <string name="other_profile_from_label">From</string>
+    <string name="other_profile_to_label">To</string>
+    <string name="other_profile_schedule_label">Schedule</string>
+    <string name="other_profile_schedule_value">Saturday, 10 AM</string>
+    <string name="other_profile_trip_description">Heading to Alexandria for the weekend. I can carry small to medium packages along the way.</string>
+    <string name="other_profile_verified_label">Verified ID</string>
+    <string name="other_profile_fast_delivery_label">Fast Delivery</string>
+    <string name="other_profile_reviews_title">User Reviews</string>
+    <string name="other_profile_reviews_view_all">View All</string>
+    <string name="other_profile_review_time_recent">3 days ago</string>
+    <string name="other_profile_review_time_last_week">Last week</string>
+    <string name="other_profile_contact_button">Contact Ahmed</string>
+
+    <!-- More -->
+    <string name="more_title">More</string>
+    <string name="more_dark_mode">Dark Mode</string>
+    <string name="more_arabic_language">Arabic Language</string>
+    <string name="more_login_register">Login or Register</string>
+    <string name="more_company_section">Company</string>
+
+    <!-- Info Pages -->
+    <string name="info_company_title">Company</string>
+    <string name="info_company_subtitle">About our mission and team</string>
+    <string name="info_about_title">About</string>
+    <string name="info_about_subtitle">What makes Rahey-Gaay different</string>
+    <string name="info_careers_title">Careers</string>
+    <string name="info_careers_subtitle">Join the Rahey-Gaay team</string>
+    <string name="info_press_title">Press</string>
+    <string name="info_press_subtitle">Latest news and press kit</string>
+    <string name="info_blog_title">Blog</string>
+    <string name="info_blog_subtitle">Stories from our travelers</string>
+    <string name="info_support_title">Support</string>
+    <string name="info_support_subtitle">Get help and contact us</string>
+    <string name="info_help_center_title">Help Center</string>
+    <string name="info_help_center_subtitle">Answers to common questions</string>
+    <string name="info_safety_title">Safety Center</string>
+    <string name="info_safety_subtitle">Safety and verification policies</string>
+    <string name="info_community_title">Community</string>
+    <string name="info_community_subtitle">Community guidelines and tips</string>
+    <string name="info_contact_title">Contact</string>
+    <string name="info_contact_subtitle">Reach the Rahey-Gaay team</string>
+    <string name="info_terms_title">Terms of Service</string>
+    <string name="info_terms_subtitle">Legal terms and conditions</string>
+    <string name="info_privacy_title">Privacy Policy</string>
+    <string name="info_privacy_subtitle">How we handle data</string>
+    <string name="info_map_title">Map</string>
+    <string name="info_map_subtitle">Explore deliveries and routes</string>
+    <string name="info_profile_title">Profile</string>
+    <string name="info_profile_subtitle">Manage your account settings</string>
+
+    <!-- Names -->
+    <string name="name_ahmed_ali">Ahmed Ali</string>
+    <string name="name_fatma_hassan">Fatma Hassan</string>
+    <string name="name_omar_mostafa">Omar Mostafa</string>
+    <string name="name_ahmed_short">Ahmed</string>
+    <string name="city_cairo">Cairo</string>
+    <string name="city_alexandria">Alexandria</string>
+    <string name="review_comment_fatma">Ahmed is very respectful and delivered exactly on time. Highly recommended.</string>
+    <string name="review_comment_omar">Excellent experience and consistent communication throughout the trip. Thank you Ahmed.</string>
+
+    <!-- Info Body -->
+    <string name="info_body">%1$s\n\nRahey-Gaay connects travelers and senders to build a safe, trusted delivery network. Use this page to add your final copy, FAQs, and policies. Content here is ready to replace with real data once the backend and CMS are connected.\n\nHighlights\n- Clear descriptions and easy navigation.\n- Consistent typography and spacing.\n- Ready for localization in Arabic and English.</string>
 </resources>

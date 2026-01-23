@@ -1,0 +1,55 @@
+
+Rahey-Gaay application plan
+
+Goals
+- Build a scalable, multi-page travel app with a strong design system.
+- Support light/dark themes and English/Arabic (RTL/LTR) experiences.
+- Keep UI consistent, performant, and easy to extend.
+
+Design system
+- Single source of truth for colors, typography, spacing, corner radius, and shadows.
+- Central theme module: light/dark palettes, button styles, card styles, gradients.
+- Brand name/logo loaded from .env and exposed via BuildConfig.
+
+Architecture
+- UI package structure:
+  - ui/theme (colors, typography, shapes)
+  - ui/components (buttons, cards, inputs, section headers)
+  - ui/screens (Home, Map, Support, Auth, Profile, Info)
+  - ui/navigation (routes, bottom bar, nav graph)
+- Shared state: simple UI state classes per screen; no network integration yet.
+
+Screens to deliver (from pages.txt)
+- Core: Home, Map, Support/Chat, Login/Register, User Profile, Other User Profile.
+- Info pages (template-based): Company, About, Careers, Press, Blog, Support, Help Center,
+  Safety Center, Community, Contact, Terms of Service, Privacy Policy.
+
+Navigation
+- Bottom bar: Home, Map, Support, Profile, More.
+- Stack navigation for detail pages and login/register flows.
+
+UX requirements
+- Buttons: press feedback (scale/alpha ripple), consistent radius and shadows.
+- Links: real navigation targets, no dead buttons.
+- Loading: startup loading screen + page skeletons for content.
+- Keyboard handling: use insets so inputs remain visible when the keyboard appears.
+
+Localization and RTL
+- English + Arabic strings.
+- RTL layout direction when Arabic is active.
+- Mirror icon/text placement where needed.
+
+Performance
+- Keep dependencies minimal.
+- Avoid heavy recompositions and large image loads.
+- Use lazy lists for large content.
+
+Milestones
+1) Theme + brand config (colors, fonts, logo, app name from .env).
+2) Navigation scaffolding + bottom bar.
+3) Implement Home screen UI (design-based welcome/home).
+4) Implement remaining screens and info templates.
+5) Add localization, RTL, and loading states.
+6) UI polish: button effects, spacing, and accessibility.
+
+

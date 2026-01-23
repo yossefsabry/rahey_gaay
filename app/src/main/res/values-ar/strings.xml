@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">رايح جاي</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_map">الخريطة</string>
+    <string name="nav_support">الدعم</string>
+    <string name="nav_profile">الملف الشخصي</string>
+    <string name="nav_more">المزيد</string>
+
+    <!-- Common -->
+    <string name="common_search">بحث</string>
+    <string name="common_search_placeholder">إلى أين تريد إرسال شحنتك؟</string>
+    <string name="common_age">العمر %1$s</string>
+    <string name="common_verified">موثق</string>
+    <string name="common_trusted">موثوق</string>
+    <string name="common_active_now">نشط الآن</string>
+    <string name="common_origin">من</string>
+    <string name="common_destination">إلى</string>
+    <string name="common_traveling_tomorrow">مسافر غداً</string>
+    <string name="common_departure_time">الانطلاق حوالي 09:00 ص</string>
+    <string name="common_contact_name">تواصل مع %1$s</string>
+    <string name="common_view_all">عرض الكل</string>
+
+    <!-- Home -->
+    <string name="home_tagline_title">تواصل.\nسافر. وصّل.</string>
+    <string name="home_tagline_description">انضم إلى أكبر شبكة شحن طرود بين الأفراد في مصر، وتواصل مع مسافرين موثوقين.</string>
+    <string name="home_feature_verified_title">مستخدمون موثقون</string>
+    <string name="home_feature_verified_subtitle">هوية مؤكدة لجميع المسافرين</string>
+    <string name="home_feature_rated_title">نظام تقييم دقيق</string>
+    <string name="home_feature_rated_subtitle">تقييمات حقيقية من مجتمعنا</string>
+    <string name="home_feature_fast_title">توصيل سريع</string>
+    <string name="home_feature_fast_subtitle">شحنتك تصل في نفس اليوم</string>
+    <string name="home_discover_title">اكتشف مصر مع %1$s</string>
+    <string name="home_discover_description">تواصل مع المسافرين، وفر في تكاليف الشحن، واستمتع بتجربة آمنة وموثوقة أينما كنت.</string>
+    <string name="home_discover_cta">ابدأ الاستكشاف</string>
+    <string name="home_stats_active_users">المستخدمون النشطون</string>
+    <string name="home_stats_deliveries_today">تسليمات اليوم</string>
+    <string name="home_live_connections">اتصالات مباشرة</string>
+    <string name="home_live_connections_footer">اتصالات لحظية عبر مصر</string>
+    <string name="home_live_connections_live">مباشر</string>
+    <string name="home_featured_title">مسافرون متميزون</string>
+    <string name="home_featured_subtitle">أفضل المسافرين الموثوقين المتاحين الآن</string>
+    <string name="home_featured_see_all">عرض الكل</string>
+    <string name="home_featured_view_all">عرض جميع المسافرين</string>
+    <string name="home_rating_count">(%1$s تقييم)</string>
+    <string name="home_route_cairo_alex">القاهرة → الإسكندرية</string>
+    <string name="home_route_alex_cairo">الإسكندرية → القاهرة</string>
+    <string name="route_giza_hurghada">الجيزة → الغردقة</string>
+    <string name="home_note_ahmed">"مسافر للإسكندرية نهاية الأسبوع، يسعدني نقل الطرود الصغيرة والمتوسطة!"</string>
+    <string name="home_note_fatma">"عائدة للقاهرة يوم الأحد. ملتزمة بالمواعيد وشحنتك في أمان."</string>
+    <string name="home_how_it_works_title">كيف يعمل %1$s</string>
+    <string name="home_how_it_works_subtitle">بسيط، آمن، وموثوق في 3 خطوات</string>
+    <string name="home_step_search_title">١. ابحث</string>
+    <string name="home_step_search_desc">اعثر على مسافرين موثوقين متجهين إلى وجهتك عبر الخريطة أو البحث.</string>
+    <string name="home_step_connect_title">٢. تواصل</string>
+    <string name="home_step_connect_desc">تحدث مع المسافر مباشرة لترتيب الاستلام والتسليم.</string>
+    <string name="home_step_deliver_title">٣. استلم</string>
+    <string name="home_step_deliver_desc">يصل طردك بأمان مع عضو موثوق من المجتمع.</string>
+    <string name="home_why_choose_title">لماذا تختار %1$s؟</string>
+    <string name="home_reason_trusted_title">مجتمع موثوق</string>
+    <string name="home_reason_trusted_desc">جميع مسافرينا موثقون بالهوية لراحة بالك.</string>
+    <string name="home_reason_flexible_title">مرن وسريع</string>
+    <string name="home_reason_flexible_desc">اعثر على مسافرين في أي وقت لتوصيل سريع ومرن.</string>
+    <string name="home_reason_affordable_title">سعر مناسب</string>
+    <string name="home_reason_affordable_desc">وفر مقارنة بخدمات الشحن التقليدية عبر التواصل المباشر.</string>
+
+    <!-- Map -->
+    <string name="map_origin_value">القاهرة، مصر</string>
+    <string name="map_destination_value">الإسكندرية، مصر</string>
+    <string name="map_traveler_description">مسافر للإسكندرية نهاية الأسبوع ويسعدني نقل الطرود الصغيرة أو المستندات. أسافر بالسيارة.</string>
+
+    <!-- Support -->
+    <string name="support_title">الدعم والمحادثة</string>
+    <string name="support_help_center_title">مركز المساعدة</string>
+    <string name="support_help_center_subtitle">اعثر على إجابات سريعة لأسئلتك</string>
+    <string name="support_tab_chats">المحادثات</string>
+    <string name="support_tab_tickets">التذاكر</string>
+    <string name="support_active_chats_title">المحادثات النشطة</string>
+    <string name="support_new_count">%1$d جديدة</string>
+    <string name="support_chat_ahmed_message">أهلاً بك، هل يمكنني استلام الطرد غداً؟</string>
+    <string name="support_chat_ahmed_time">منذ دقيقتين</string>
+    <string name="support_chat_ahmed_tag">القاهرة ← الإسكندرية</string>
+    <string name="support_support_team_name">فريق دعم رايح جاي</string>
+    <string name="support_support_team_message">جاري مراجعة طلبك رقم #4920...</string>
+    <string name="support_support_team_time">10:45 ص</string>
+    <string name="support_chat_fatma_message">تم تسليم الشحنة بنجاح، شكراً لك!</string>
+    <string name="support_chat_fatma_time">أمس</string>
+    <string name="support_chat_fatma_tag">مكتمل</string>
+    <string name="support_chat_omar_message">هل يمكنك إرسال صورة للمحتويات؟</string>
+    <string name="support_chat_omar_time">الاثنين</string>
+
+    <!-- Auth -->
+    <string name="auth_tagline">تواصل. سافر. وصّل.</string>
+    <string name="auth_tab_login">تسجيل الدخول</string>
+    <string name="auth_tab_signup">إنشاء حساب</string>
+    <string name="auth_label_email">البريد الإلكتروني</string>
+    <string name="auth_label_password">كلمة المرور</string>
+    <string name="auth_label_full_name">الاسم الكامل</string>
+    <string name="auth_label_create_password">إنشاء كلمة مرور</string>
+    <string name="auth_placeholder_email">name@example.com</string>
+    <string name="auth_placeholder_password">••••••••</string>
+    <string name="auth_placeholder_name">أحمد علي</string>
+    <string name="auth_button_sign_in">تسجيل الدخول</string>
+    <string name="auth_button_create_account">إنشاء حساب</string>
+    <string name="auth_or_continue">أو المتابعة باستخدام</string>
+    <string name="auth_google">جوجل</string>
+    <string name="auth_facebook">فيسبوك</string>
+    <string name="auth_terms_line">بالانضمام، أنت توافق على شروط الخدمة وسياسة الخصوصية.</string>
+    <string name="auth_terms_title">شروط الخدمة</string>
+    <string name="auth_privacy_title">سياسة الخصوصية</string>
+
+    <!-- Profile -->
+    <string name="profile_title">الملف الشخصي</string>
+    <string name="profile_header_subtitle">نظرة عامة على الحساب والأمان</string>
+    <string name="profile_subtitle">مسافر ومرسل • القاهرة، مصر</string>
+    <string name="profile_description">مهتم بالأمان والالتزام بالمواعيد والتواصل الواضح مع المرسلين.</string>
+    <string name="profile_edit_button">تعديل الملف الشخصي</string>
+    <string name="profile_review_count">(١٢٤ تقييم)</string>
+    <string name="profile_verification_title">حالة التحقق</string>
+    <string name="profile_verify_phone_title">رقم الهاتف</string>
+    <string name="profile_verify_phone_subtitle">تم التحقق عبر رسالة SMS</string>
+    <string name="profile_verify_social_title">الحساب الاجتماعي</string>
+    <string name="profile_verify_social_subtitle">ربط حساب اجتماعي موثوق</string>
+    <string name="profile_verify_identity_title">الهوية</string>
+    <string name="profile_verify_identity_subtitle">تم التحقق من الهوية الرسمية</string>
+    <string name="profile_verified_badge">موثق</string>
+    <string name="profile_active_trips_label">الرحلات النشطة</string>
+    <string name="profile_deliveries_label">التوصيلات</string>
+    <string name="profile_trip_departure">المغادرة: 06:00 م</string>
+    <string name="profile_trip_space">المساحة: طرود صغيرة</string>
+    <string name="profile_trip_today">اليوم</string>
+    <string name="profile_trip_date">24 نوفمبر</string>
+    <string name="profile_completed_deliveries_title">التوصيلات المكتملة</string>
+    <string name="profile_payout_methods">طرق السحب</string>
+    <string name="profile_logout">تسجيل الخروج</string>
+    <string name="profile_delivery_laptop">توصيل لابتوب • منذ يومين</string>
+    <string name="profile_delivery_documents">توصيل مستندات • منذ أسبوع</string>
+
+    <!-- Other Profile -->
+    <string name="other_profile_title">الملف الشخصي</string>
+    <string name="other_profile_member_since">عضو منذ ٢٠٢٣ • ٢٨ سنة</string>
+    <string name="other_profile_rating_count">(٤٥ تقييم)</string>
+    <string name="other_profile_trips_label">الرحلات</string>
+    <string name="other_profile_deliveries_label">التوصيلات</string>
+    <string name="other_profile_next_trip_title">الرحلة القادمة</string>
+    <string name="other_profile_active_now">نشط الآن</string>
+    <string name="other_profile_from_label">من</string>
+    <string name="other_profile_to_label">إلى</string>
+    <string name="other_profile_schedule_label">الموعد</string>
+    <string name="other_profile_schedule_value">السبت، ١٠ ص</string>
+    <string name="other_profile_trip_description">مسافر للإسكندرية لقضاء عطلة نهاية الأسبوع. يمكنني استلام طرود صغيرة أو متوسطة الحجم وتوصيلها في الطريق.</string>
+    <string name="other_profile_verified_label">هوية موثقة</string>
+    <string name="other_profile_fast_delivery_label">توصيل سريع</string>
+    <string name="other_profile_reviews_title">آراء المستخدمين</string>
+    <string name="other_profile_reviews_view_all">عرض الكل</string>
+    <string name="other_profile_review_time_recent">منذ ٣ أيام</string>
+    <string name="other_profile_review_time_last_week">الأسبوع الماضي</string>
+    <string name="other_profile_contact_button">تواصل مع أحمد</string>
+
+    <!-- More -->
+    <string name="more_title">المزيد</string>
+    <string name="more_dark_mode">الوضع الداكن</string>
+    <string name="more_arabic_language">اللغة العربية</string>
+    <string name="more_login_register">تسجيل الدخول أو إنشاء حساب</string>
+    <string name="more_company_section">الشركة</string>
+
+    <!-- Info Pages -->
+    <string name="info_company_title">الشركة</string>
+    <string name="info_company_subtitle">حول مهمتنا وفريقنا</string>
+    <string name="info_about_title">نبذة</string>
+    <string name="info_about_subtitle">ما الذي يميز رايح جاي</string>
+    <string name="info_careers_title">الوظائف</string>
+    <string name="info_careers_subtitle">انضم إلى فريق رايح جاي</string>
+    <string name="info_press_title">الصحافة</string>
+    <string name="info_press_subtitle">آخر الأخبار والمواد الإعلامية</string>
+    <string name="info_blog_title">المدونة</string>
+    <string name="info_blog_subtitle">قصص من مسافرينا</string>
+    <string name="info_support_title">الدعم</string>
+    <string name="info_support_subtitle">احصل على المساعدة وتواصل معنا</string>
+    <string name="info_help_center_title">مركز المساعدة</string>
+    <string name="info_help_center_subtitle">إجابات للأسئلة الشائعة</string>
+    <string name="info_safety_title">مركز الأمان</string>
+    <string name="info_safety_subtitle">سياسات الأمان والتحقق</string>
+    <string name="info_community_title">المجتمع</string>
+    <string name="info_community_subtitle">إرشادات ونصائح المجتمع</string>
+    <string name="info_contact_title">تواصل</string>
+    <string name="info_contact_subtitle">تواصل مع فريق رايح جاي</string>
+    <string name="info_terms_title">شروط الخدمة</string>
+    <string name="info_terms_subtitle">الشروط والأحكام القانونية</string>
+    <string name="info_privacy_title">سياسة الخصوصية</string>
+    <string name="info_privacy_subtitle">كيف نتعامل مع البيانات</string>
+    <string name="info_map_title">الخريطة</string>
+    <string name="info_map_subtitle">استكشف التوصيلات والمسارات</string>
+    <string name="info_profile_title">الملف الشخصي</string>
+    <string name="info_profile_subtitle">إدارة إعدادات حسابك</string>
+
+    <!-- Names -->
+    <string name="name_ahmed_ali">أحمد علي</string>
+    <string name="name_fatma_hassan">فاطمة حسن</string>
+    <string name="name_omar_mostafa">عمر مصطفى</string>
+    <string name="name_ahmed_short">أحمد</string>
+    <string name="city_cairo">القاهرة</string>
+    <string name="city_alexandria">الإسكندرية</string>
+    <string name="review_comment_fatma">أحمد شخص محترم جداً ووصل الأمانة في وقتها بالضبط. أنصح بالتعامل معه.</string>
+    <string name="review_comment_omar">تجربة ممتازة وتواصل مستمر طوال الطريق. شكراً لك يا أحمد.</string>
+
+    <!-- Info Body -->
+    <string name="info_body">%1$s\n\nتربط رايح جاي بين المسافرين والمرسلين لبناء شبكة توصيل آمنة وموثوقة. استخدم هذه الصفحة لإضافة النص النهائي والأسئلة الشائعة والسياسات. المحتوى هنا جاهز للاستبدال ببيانات حقيقية عند ربط النظام الخلفي.\n\nأبرز النقاط\n- وصف واضح وتنقل سهل.\n- خط موحد ومسافات مريحة.\n- جاهز للتعريب ودعم الإنجليزية.</string>
+</resources>

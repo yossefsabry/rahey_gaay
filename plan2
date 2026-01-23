@@ -1,0 +1,23 @@
+
+adding this feature
+
+1. No Data Layer (Critical)
+   - No repository pattern
+   - No data models
+   - No network/datasource abstractions
+   - All data is hardcoded in UI
+2. No State Management
+   - Simple AppState only holds UI state
+   - No ViewModel or similar pattern
+   - No business logic separation
+3. No DI Container
+   - Manual dependency injection in Composables
+   - Hard to test and scale
+4. Large Screen Files
+   - HomeScreen.kt: 696 lines
+   - OtherProfileScreen.kt: 418 lines
+   - Should be broken into smaller components
+5. No Architecture Pattern
+   - Missing MVVM, MVI, or similar
+   - UI and logic tightly coupled
+---
