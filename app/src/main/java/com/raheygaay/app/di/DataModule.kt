@@ -1,16 +1,22 @@
 package com.raheygaay.app.di
 
 import com.raheygaay.app.BuildConfig
+import com.raheygaay.app.data.local.LocalStreakDataSource
+import com.raheygaay.app.data.mock.MockDashboardDataSource
 import com.raheygaay.app.data.mock.MockHomeDataSource
 import com.raheygaay.app.data.mock.MockMapDataSource
 import com.raheygaay.app.data.mock.MockOtherProfileDataSource
 import com.raheygaay.app.data.mock.MockProfileDataSource
 import com.raheygaay.app.data.mock.MockSupportDataSource
+import com.raheygaay.app.data.remote.RemoteDashboardDataSource
 import com.raheygaay.app.data.remote.RemoteHomeDataSource
 import com.raheygaay.app.data.remote.RemoteMapDataSource
 import com.raheygaay.app.data.remote.RemoteOtherProfileDataSource
 import com.raheygaay.app.data.remote.RemoteProfileDataSource
+import com.raheygaay.app.data.remote.RemoteStreakDataSource
 import com.raheygaay.app.data.remote.RemoteSupportDataSource
+import com.raheygaay.app.data.repository.DashboardRepository
+import com.raheygaay.app.data.repository.DashboardRepositoryImpl
 import com.raheygaay.app.data.repository.HomeRepository
 import com.raheygaay.app.data.repository.HomeRepositoryImpl
 import com.raheygaay.app.data.repository.MapRepository
@@ -19,13 +25,18 @@ import com.raheygaay.app.data.repository.OtherProfileRepository
 import com.raheygaay.app.data.repository.OtherProfileRepositoryImpl
 import com.raheygaay.app.data.repository.ProfileRepository
 import com.raheygaay.app.data.repository.ProfileRepositoryImpl
+import com.raheygaay.app.data.repository.StreakRepository
+import com.raheygaay.app.data.repository.StreakRepositoryImpl
 import com.raheygaay.app.data.repository.SupportRepository
 import com.raheygaay.app.data.repository.SupportRepositoryImpl
 import com.raheygaay.app.data.source.DataSourceConfig
+import com.raheygaay.app.data.source.DashboardDataSource
 import com.raheygaay.app.data.source.HomeDataSource
 import com.raheygaay.app.data.source.MapDataSource
 import com.raheygaay.app.data.source.OtherProfileDataSource
 import com.raheygaay.app.data.source.ProfileDataSource
+import com.raheygaay.app.data.source.StreakDataSource
+import com.raheygaay.app.data.source.StreakSyncDataSource
 import com.raheygaay.app.data.source.SupportDataSource
 import dagger.Module
 import dagger.Provides
@@ -93,6 +104,24 @@ object DataModule {
 
     @Provides
     @Singleton
+    @Named("mockDashboard")
+    fun provideMockDashboardDataSource(): DashboardDataSource = MockDashboardDataSource()
+
+    @Provides
+    @Singleton
+    @Named("remoteDashboard")
+    fun provideRemoteDashboardDataSource(remote: RemoteDashboardDataSource): DashboardDataSource = remote
+
+    @Provides
+    @Singleton
+    fun provideStreakDataSource(local: LocalStreakDataSource): StreakDataSource = local
+
+    @Provides
+    @Singleton
+    fun provideStreakSyncDataSource(remote: RemoteStreakDataSource): StreakSyncDataSource = remote
+
+    @Provides
+    @Singleton
     fun provideHomeRepository(
         @Named("mockHome") mockDataSource: HomeDataSource,
         @Named("remoteHome") remoteDataSource: HomeDataSource,
@@ -130,4 +159,20 @@ object DataModule {
         @Named("remoteOtherProfile") remoteDataSource: OtherProfileDataSource,
         config: DataSourceConfig
     ): OtherProfileRepository = OtherProfileRepositoryImpl(mockDataSource, remoteDataSource, config)
+
+    @Provides
+    @Singleton
+    fun provideDashboardRepository(
+        @Named("mockDashboard") mockDataSource: DashboardDataSource,
+        @Named("remoteDashboard") remoteDataSource: DashboardDataSource,
+        config: DataSourceConfig
+    ): DashboardRepository = DashboardRepositoryImpl(mockDataSource, remoteDataSource, config)
+
+    @Provides
+    @Singleton
+    fun provideStreakRepository(
+        localDataSource: StreakDataSource,
+        remoteDataSource: StreakSyncDataSource,
+        config: DataSourceConfig
+    ): StreakRepository = StreakRepositoryImpl(localDataSource, remoteDataSource, config)
 }

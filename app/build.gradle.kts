@@ -30,8 +30,8 @@ android {
             properties.load(FileInputStream(envFile))
         }
 
-        val appName = properties.getProperty("APP_NAME", "Rahey-Gaay")
-        val appLogo = properties.getProperty("APP_LOGO", "app_logo")
+        val appName = properties.getProperty("APP_NAME", "Rahey-Gaay").trim().trim('"')
+        val appLogo = properties.getProperty("APP_LOGO", "app_logo").trim().trim('"')
 
         buildConfigField("String", "APP_NAME", "\"$appName\"")
         buildConfigField("String", "APP_LOGO", "\"$appLogo\"")
@@ -56,6 +56,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -88,6 +89,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Compose
     implementation(platform("androidx.compose:compose-bom:2024.02.00"))
@@ -118,6 +120,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

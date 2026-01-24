@@ -13,10 +13,22 @@ import androidx.navigation.compose.rememberNavController
 class AppState(
     val navController: NavHostController,
     initialDark: Boolean,
-    initialArabic: Boolean
+    initialArabic: Boolean,
+    initialAuthState: AuthState = AuthState.LoggedOut
 ) {
     var isDark by mutableStateOf(initialDark)
     var isArabic by mutableStateOf(initialArabic)
+    var authState by mutableStateOf(initialAuthState)
+    var pendingRoute by mutableStateOf<String?>(null)
+
+    val isLoggedIn: Boolean
+        get() = authState != AuthState.LoggedOut
+}
+
+enum class AuthState {
+    LoggedOut,
+    Guest,
+    LoggedIn
 }
 
 @Composable

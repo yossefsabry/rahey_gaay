@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FlightTakeoff
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.outlined.Settings
@@ -31,11 +32,14 @@ import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,14 +59,20 @@ import com.raheygaay.app.data.model.VerificationStatus
 import com.raheygaay.app.data.model.VerificationType
 import com.raheygaay.app.ui.components.NetworkImage
 import com.raheygaay.app.ui.components.PrimaryButton
+import com.raheygaay.app.ui.components.StreakPopup
+import com.raheygaay.app.ui.streak.StreakViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel()
+    isGuest: Boolean,
+    viewModel: ProfileViewModel = hiltViewModel(),
+    streakViewModel: StreakViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val profile = uiState.value.profile
+    val streakState = streakViewModel.streakState.collectAsState()
+    val showInfo = remember { mutableStateOf(false) }
     if (profile == null) {
         Box(
             modifier = Modifier
@@ -74,36 +84,48 @@ fun ProfileScreen(
         }
         return
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            Spacer(modifier = Modifier.height(10.dp))
-            ProfileHeader()
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+                ProfileHeader()
+            }
+            item {
+                ProfileHero(profile, isGuest)
+            }
+            item {
+                VerificationSection(profile.verifications)
+            }
+            item {
+                StreakSection(
+                    currentDays = streakState.value.currentDays,
+                    longestDays = streakState.value.longestDays,
+                    onInfo = { showInfo.value = true }
+                )
+            }
+            item {
+                ProfileStats(profile.stats)
+            }
+            item {
+                ActiveTripsSection(profile.trips)
+            }
+            item {
+                CompletedDeliveriesSection(profile.deliveries)
+            }
+            item {
+                ProfileActions()
+            }
+            item {
+                Spacer(modifier = Modifier.height(96.dp))
+            }
         }
-        item {
-            ProfileHero(profile)
-        }
-        item {
-            VerificationSection(profile.verifications)
-        }
-        item {
-            ProfileStats(profile.stats)
-        }
-        item {
-            ActiveTripsSection(profile.trips)
-        }
-        item {
-            CompletedDeliveriesSection(profile.deliveries)
-        }
-        item {
-            ProfileActions()
-        }
-        item {
-            Spacer(modifier = Modifier.height(96.dp))
+        if (showInfo.value) {
+            StreakPopup(state = streakState.value, onDismiss = { showInfo.value = false })
         }
     }
 }
@@ -163,7 +185,7 @@ private fun ProfileHeader() {
 }
 
 @Composable
-private fun ProfileHero(profile: Profile) {
+private fun ProfileHero(profile: Profile, isGuest: Boolean) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -200,11 +222,31 @@ private fun ProfileHero(profile: Profile) {
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = stringResource(profile.nameRes),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = stringResource(profile.nameRes),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            if (isGuest) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.guest_badge),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
         Text(
             text = stringResource(profile.subtitleRes),
             style = MaterialTheme.typography.bodySmall,
@@ -249,6 +291,76 @@ private fun ProfileHero(profile: Profile) {
             leadingIcon = Icons.Outlined.Edit,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+private fun StreakSection(
+    currentDays: Int,
+    longestDays: Int,
+    onInfo: () -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.streak_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                IconButton(onClick = onInfo) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = stringResource(R.string.streak_current_label),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = stringResource(R.string.streak_day_unit, currentDays),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = stringResource(R.string.streak_best_label),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = stringResource(R.string.streak_day_unit, longestDays),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
     }
 }
 

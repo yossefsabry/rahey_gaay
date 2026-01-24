@@ -30,6 +30,13 @@ fun HomeScreen(
     onSeeAllTravelers: () -> Unit,
     onContactTraveler: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenDashboard: () -> Unit,
+    onToggleDark: () -> Unit,
+    onLogout: () -> Unit,
+    onOpenAuth: () -> Unit,
+    isLoggedIn: Boolean,
+    isGuest: Boolean,
+    isDark: Boolean,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -50,8 +57,8 @@ fun HomeScreen(
         }
         return
     }
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.4f
-    val accent = if (isDark) {
+    val isSurfaceDark = MaterialTheme.colorScheme.background.luminance() < 0.4f
+    val accent = if (isSurfaceDark) {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
     } else {
         BrandSoftLavender.copy(alpha = 0.3f)
@@ -75,7 +82,17 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(22.dp)
         ) {
             item {
-                HomeHeader(appName = appName, onOpenProfile = onOpenProfile)
+                HomeHeader(
+                    appName = appName,
+                    isLoggedIn = isLoggedIn,
+                    isGuest = isGuest,
+                    onOpenProfile = onOpenProfile,
+                    onOpenDashboard = onOpenDashboard,
+                    onToggleDark = onToggleDark,
+                    onLogout = onLogout,
+                    onOpenAuth = onOpenAuth,
+                    isDark = isDark
+                )
             }
             item {
                 HeroSection(onSearch = onSearch)

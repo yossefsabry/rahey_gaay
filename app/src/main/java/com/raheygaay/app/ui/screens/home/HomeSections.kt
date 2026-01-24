@@ -26,19 +26,28 @@ import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.automirrored.outlined.ShowChart
+import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,7 +80,22 @@ import com.raheygaay.app.ui.components.PrimaryButton
 import com.raheygaay.app.ui.theme.BrandMint
 
 @Composable
-internal fun HomeHeader(appName: String, onOpenProfile: () -> Unit) {
+internal fun HomeHeader(
+    appName: String,
+    isLoggedIn: Boolean,
+    isGuest: Boolean,
+    onOpenProfile: () -> Unit,
+    onOpenDashboard: () -> Unit,
+    onToggleDark: () -> Unit,
+    onLogout: () -> Unit,
+    onOpenAuth: () -> Unit,
+    isDark: Boolean
+) {
+    val menuExpanded = remember { mutableStateOf(false) }
+    val handleDarkToggle = {
+        menuExpanded.value = false
+        onToggleDark()
+    }
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
         tonalElevation = 0.dp,
@@ -101,20 +125,96 @@ internal fun HomeHeader(appName: String, onOpenProfile: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.ExtraBold
                 )
+                if (isGuest) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                RoundedCornerShape(10.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.guest_badge),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                    .clickable { onOpenProfile() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PersonOutline,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            if (isLoggedIn) {
+                Box {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                            .clickable { menuExpanded.value = true },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.PersonOutline,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded.value,
+                        onDismissRequest = { menuExpanded.value = false },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.menu_profile)) },
+                            leadingIcon = { Icon(imageVector = Icons.Outlined.PersonOutline, contentDescription = null) },
+                            onClick = {
+                                menuExpanded.value = false
+                                onOpenProfile()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.menu_dashboard)) },
+                            leadingIcon = { Icon(imageVector = Icons.Outlined.Dashboard, contentDescription = null) },
+                            onClick = {
+                                menuExpanded.value = false
+                                onOpenDashboard()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.menu_dark_mode)) },
+                            leadingIcon = { Icon(imageVector = Icons.Outlined.DarkMode, contentDescription = null) },
+                            trailingIcon = {
+                                Switch(checked = isDark, onCheckedChange = { handleDarkToggle() })
+                            },
+                            onClick = { handleDarkToggle() }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.menu_logout)) },
+                            leadingIcon = { Icon(imageVector = Icons.AutoMirrored.Outlined.Logout, contentDescription = null) },
+                            onClick = {
+                                menuExpanded.value = false
+                                onLogout()
+                            }
+                        )
+                    }
+                }
+            } else {
+                Button(
+                    onClick = onOpenAuth,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.home_sign_in_up),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }

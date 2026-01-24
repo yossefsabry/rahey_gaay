@@ -20,6 +20,7 @@ sealed class AppRoute(
     object Support : AppRoute("support", R.string.nav_support, Icons.Outlined.ChatBubbleOutline)
     object Profile : AppRoute("profile", R.string.nav_profile, Icons.Outlined.PersonOutline)
     object More : AppRoute("more", R.string.nav_more, Icons.Outlined.Menu)
+    object Dashboard : AppRoute("dashboard")
     object Login : AppRoute("login")
     object Register : AppRoute("register")
     object OtherProfile : AppRoute("other_profile")

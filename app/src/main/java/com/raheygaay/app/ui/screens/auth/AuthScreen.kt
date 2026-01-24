@@ -52,6 +52,7 @@ import com.raheygaay.app.ui.components.SecondaryButton
 fun AuthScreen(
     onLogin: () -> Unit,
     onRegister: () -> Unit,
+    onGuestLogin: () -> Unit,
     onTerms: () -> Unit,
     onPrivacy: () -> Unit,
     startOnLogin: Boolean = true
@@ -147,7 +148,13 @@ fun AuthScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     PrimaryButton(
                         text = stringResource(R.string.auth_button_sign_in),
-                        onClick = onLogin,
+                        onClick = {
+                            if (email.value.isBlank() || password.value.isBlank()) {
+                                onGuestLogin()
+                            } else {
+                                onLogin()
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth()
                     )
                 } else {
@@ -181,7 +188,13 @@ fun AuthScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     PrimaryButton(
                         text = stringResource(R.string.auth_button_create_account),
-                        onClick = onRegister,
+                        onClick = {
+                            if (name.value.isBlank() || email.value.isBlank() || password.value.isBlank()) {
+                                onGuestLogin()
+                            } else {
+                                onRegister()
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -206,6 +219,12 @@ fun AuthScreen(
                         modifier = Modifier.weight(1f)
                     )
                 }
+                Spacer(modifier = Modifier.height(12.dp))
+                SecondaryButton(
+                    text = stringResource(R.string.auth_guest_button),
+                    onClick = onGuestLogin,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
