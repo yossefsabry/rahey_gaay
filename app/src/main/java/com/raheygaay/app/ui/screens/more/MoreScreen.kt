@@ -11,16 +11,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.WorkOutline
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.SupportAgent
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.HealthAndSafety
+import androidx.compose.material.icons.outlined.MailOutline
+import androidx.compose.material.icons.outlined.Policy
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.automirrored.outlined.NavigateNext
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -33,6 +50,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.annotation.StringRes
 import com.raheygaay.app.R
+import com.raheygaay.app.ui.theme.BrandAmber
+import com.raheygaay.app.ui.theme.BrandMint
+import com.raheygaay.app.ui.theme.BrandOrange
+import com.raheygaay.app.ui.theme.BrandTeal
 
 @Composable
 fun MoreScreen(
@@ -48,10 +69,12 @@ fun MoreScreen(
 ) {
     val pages = infoPages()
 
+    val listState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp),
+        state = listState,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
@@ -148,15 +171,7 @@ fun MoreScreen(
             }
         }
         item {
-            Text(
-                text = stringResource(R.string.more_company_section),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-        items(pages) { page ->
-            InfoRow(page = page, onClick = { onOpenInfo(page) })
+            CompanySection(pages = pages, onOpenInfo = onOpenInfo)
         }
         item { Spacer(modifier = Modifier.height(96.dp)) }
     }
@@ -198,19 +213,66 @@ private fun SettingsCard(
 }
 
 @Composable
-private fun InfoRow(page: InfoPage, onClick: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick() }
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+private fun CompanySection(pages: List<InfoPage>, onOpenInfo: (InfoPage) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(width = 4.dp, height = 18.dp)
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(2.dp))
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(R.string.more_company_section),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
         ) {
+            Column {
+                pages.forEachIndexed { index, page ->
+                    CompanyRow(page = page, onClick = { onOpenInfo(page) })
+                    if (index < pages.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(start = 64.dp),
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompanyRow(page: InfoPage, onClick: () -> Unit) {
+    val accent = infoAccent(page.id)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(accent.copy(alpha = 0.12f), RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = infoIcon(page.id),
+                    contentDescription = null,
+                    tint = accent
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
                     text = stringResource(page.titleRes),
@@ -223,8 +285,54 @@ private fun InfoRow(page: InfoPage, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
-            Icon(imageVector = Icons.AutoMirrored.Outlined.NavigateNext, contentDescription = null)
         }
+        Icon(
+            imageVector = Icons.AutoMirrored.Outlined.NavigateNext,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+        )
+    }
+}
+
+@Composable
+private fun infoIcon(id: String): androidx.compose.ui.graphics.vector.ImageVector {
+    return when (id) {
+        "company" -> Icons.Outlined.Business
+        "about" -> Icons.Outlined.Info
+        "careers" -> Icons.Outlined.WorkOutline
+        "press" -> Icons.Outlined.Public
+        "blog" -> Icons.AutoMirrored.Outlined.Article
+        "support" -> Icons.Outlined.SupportAgent
+        "help-center" -> Icons.AutoMirrored.Outlined.HelpOutline
+        "safety" -> Icons.Outlined.HealthAndSafety
+        "community" -> Icons.Outlined.Groups
+        "contact" -> Icons.Outlined.MailOutline
+        "terms" -> Icons.Outlined.Policy
+        "privacy" -> Icons.Outlined.Lock
+        "map" -> Icons.Outlined.Map
+        "profile" -> Icons.Outlined.PersonOutline
+        else -> Icons.Outlined.Info
+    }
+}
+
+@Composable
+private fun infoAccent(id: String): androidx.compose.ui.graphics.Color {
+    return when (id) {
+        "company" -> MaterialTheme.colorScheme.primary
+        "about" -> BrandTeal
+        "careers" -> BrandMint
+        "press" -> BrandAmber
+        "blog" -> BrandOrange
+        "support" -> MaterialTheme.colorScheme.secondary
+        "help-center" -> BrandTeal
+        "safety" -> BrandMint
+        "community" -> MaterialTheme.colorScheme.primary
+        "contact" -> BrandAmber
+        "terms" -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+        "privacy" -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+        "map" -> BrandTeal
+        "profile" -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.primary
     }
 }
 

@@ -21,9 +21,17 @@ sealed class AppRoute(
     object Profile : AppRoute("profile", R.string.nav_profile, Icons.Outlined.PersonOutline)
     object More : AppRoute("more", R.string.nav_more, Icons.Outlined.Menu)
     object Dashboard : AppRoute("dashboard")
+    object Settings : AppRoute("settings")
+    object Search : AppRoute("search")
+    object Sahby : AppRoute("sahby")
+    object Chat : AppRoute("chat/{chatId}") {
+        fun createRoute(chatId: String): String = "chat/$chatId"
+    }
     object Login : AppRoute("login")
     object Register : AppRoute("register")
-    object OtherProfile : AppRoute("other_profile")
+    object OtherProfile : AppRoute("other_profile/{travelerId}") {
+        fun createRoute(travelerId: String): String = "other_profile/$travelerId"
+    }
     object Info : AppRoute("info/{pageId}") {
         fun createRoute(pageId: String): String {
             return "info/$pageId"

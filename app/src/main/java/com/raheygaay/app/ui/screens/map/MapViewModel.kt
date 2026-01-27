@@ -28,6 +28,11 @@ class MapViewModel @Inject constructor(
         loadMap()
     }
 
+    fun retry() {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        loadMap()
+    }
+
     private fun loadMap() {
         viewModelScope.launch {
             runCatching { repository.getMapContent() }
@@ -35,7 +40,10 @@ class MapViewModel @Inject constructor(
                     _uiState.value = MapUiState(isLoading = false, content = content)
                 }
                 .onFailure {
-                    _uiState.value = MapUiState(isLoading = false, errorMessage = "map")
+                    _uiState.value = MapUiState(
+                        isLoading = false,
+                        errorMessage = it.localizedMessage ?: "map"
+                    )
                 }
         }
     }

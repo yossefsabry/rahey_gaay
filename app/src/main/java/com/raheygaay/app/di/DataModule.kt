@@ -9,12 +9,15 @@ import com.raheygaay.app.data.mock.MockOtherProfileDataSource
 import com.raheygaay.app.data.mock.MockProfileDataSource
 import com.raheygaay.app.data.mock.MockSupportDataSource
 import com.raheygaay.app.data.remote.RemoteDashboardDataSource
+import com.raheygaay.app.data.remote.RemoteChatDataSource
 import com.raheygaay.app.data.remote.RemoteHomeDataSource
 import com.raheygaay.app.data.remote.RemoteMapDataSource
 import com.raheygaay.app.data.remote.RemoteOtherProfileDataSource
 import com.raheygaay.app.data.remote.RemoteProfileDataSource
 import com.raheygaay.app.data.remote.RemoteStreakDataSource
 import com.raheygaay.app.data.remote.RemoteSupportDataSource
+import com.raheygaay.app.data.repository.ChatRepository
+import com.raheygaay.app.data.repository.ChatRepositoryImpl
 import com.raheygaay.app.data.repository.DashboardRepository
 import com.raheygaay.app.data.repository.DashboardRepositoryImpl
 import com.raheygaay.app.data.repository.HomeRepository
@@ -31,6 +34,8 @@ import com.raheygaay.app.data.repository.SupportRepository
 import com.raheygaay.app.data.repository.SupportRepositoryImpl
 import com.raheygaay.app.data.source.DataSourceConfig
 import com.raheygaay.app.data.source.DashboardDataSource
+import com.raheygaay.app.data.source.ChatDataSource
+import com.raheygaay.app.data.source.ChatSyncDataSource
 import com.raheygaay.app.data.source.HomeDataSource
 import com.raheygaay.app.data.source.MapDataSource
 import com.raheygaay.app.data.source.OtherProfileDataSource
@@ -114,6 +119,10 @@ object DataModule {
 
     @Provides
     @Singleton
+    fun provideChatSyncDataSource(remote: RemoteChatDataSource): ChatSyncDataSource = remote
+
+    @Provides
+    @Singleton
     fun provideStreakDataSource(local: LocalStreakDataSource): StreakDataSource = local
 
     @Provides
@@ -167,6 +176,16 @@ object DataModule {
         @Named("remoteDashboard") remoteDataSource: DashboardDataSource,
         config: DataSourceConfig
     ): DashboardRepository = DashboardRepositoryImpl(mockDataSource, remoteDataSource, config)
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(
+        localDataSource: ChatDataSource,
+        remoteDataSource: ChatSyncDataSource,
+        config: DataSourceConfig,
+        @dagger.hilt.android.qualifiers.ApplicationContext context: android.content.Context,
+        performanceRepository: com.raheygaay.app.data.repository.PerformanceRepository
+    ): ChatRepository = ChatRepositoryImpl(localDataSource, remoteDataSource, config, context, performanceRepository)
 
     @Provides
     @Singleton

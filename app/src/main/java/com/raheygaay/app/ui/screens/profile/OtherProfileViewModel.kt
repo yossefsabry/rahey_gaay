@@ -1,5 +1,6 @@
 package com.raheygaay.app.ui.screens.profile
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raheygaay.app.data.model.OtherProfile
@@ -19,23 +20,36 @@ data class OtherProfileUiState(
 
 @HiltViewModel
 class OtherProfileViewModel @Inject constructor(
-    private val repository: OtherProfileRepository
+    private val repository: OtherProfileRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OtherProfileUiState())
     val uiState: StateFlow<OtherProfileUiState> = _uiState.asStateFlow()
 
+    private val travelerId: String = savedStateHandle.get<String>("travelerId")
+        .takeUnless { it.isNullOrBlank() }
+        ?: "ahmed_ali"
+
     init {
-        loadProfile()
+        loadProfile(travelerId)
     }
 
-    private fun loadProfile() {
+    fun retry() {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        loadProfile(travelerId)
+    }
+
+    private fun loadProfile(travelerId: String) {
         viewModelScope.launch {
-            runCatching { repository.getOtherProfile() }
+            runCatching { repository.getOtherProfile(travelerId) }
                 .onSuccess { profile ->
                     _uiState.value = OtherProfileUiState(isLoading = false, profile = profile)
                 }
                 .onFailure {
-                    _uiState.value = OtherProfileUiState(isLoading = false, errorMessage = "profile")
+                    _uiState.value = OtherProfileUiState(
+                        isLoading = false,
+                        errorMessage = it.localizedMessage ?: "profile"
+                    )
                 }
         }
     }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Rahey-Gaay</string>
+    <string name="app_name">Rahey Gaay</string>
 
     <!-- Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_map">Map</string>
-    <string name="nav_support">Support</string>
+    <string name="nav_support">Chats</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_more">More</string>
 
@@ -22,6 +22,12 @@
     <string name="common_departure_time">Departure around 09:00 AM</string>
     <string name="common_contact_name">Contact %1$s</string>
     <string name="common_view_all">View All</string>
+    <string name="common_loading">Loading...</string>
+
+    <!-- Errors -->
+    <string name="error_generic_title">Something went wrong</string>
+    <string name="error_generic_body">Check your connection and try again.</string>
+    <string name="error_retry">Retry</string>
 
     <!-- Home -->
     <string name="home_tagline_title">Connect.\nTravel. Deliver.</string>
@@ -51,6 +57,8 @@
     <string name="route_giza_hurghada">Giza → Hurghada</string>
     <string name="home_note_ahmed">Heading to Alexandria this weekend and happy to carry small packages!</string>
     <string name="home_note_fatma">Returning to Cairo on Sunday. On-time and your package is safe.</string>
+    <string name="home_note_omar">Flying to Alexandria today. Can take documents and electronics.</string>
+    <string name="home_note_salma">Driving back to Cairo tomorrow. Space for small gifts and parcels.</string>
     <string name="home_how_it_works_title">How %1$s Works</string>
     <string name="home_how_it_works_subtitle">Simple, safe, and reliable peer-to-peer delivery</string>
     <string name="home_step_search_title">1. Search</string>
@@ -83,7 +91,7 @@
     <string name="support_chat_ahmed_message">Hello, can I pick up the package tomorrow?</string>
     <string name="support_chat_ahmed_time">2 min ago</string>
     <string name="support_chat_ahmed_tag">Cairo ← Alexandria</string>
-    <string name="support_support_team_name">Rahey-Gaay Support Team</string>
+    <string name="support_support_team_name">Rahey Gaay Support Team</string>
     <string name="support_support_team_message">We are reviewing your request #4920...</string>
     <string name="support_support_team_time">10:45 AM</string>
     <string name="support_chat_fatma_message">Delivery completed successfully, thank you!</string>
@@ -120,6 +128,7 @@
     <string name="streak_popup_close">Got it</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_sahby">Sahby (صاحبي)</string>
     <string name="menu_dark_mode">Dark mode</string>
     <string name="menu_logout">Log out</string>
     <string name="more_logout">Log out</string>
@@ -132,6 +141,9 @@
     <string name="dashboard_chart_earnings">Earnings trend</string>
     <string name="dashboard_top_places">Most visited places</string>
     <string name="dashboard_earnings_value">EGP %1$d</string>
+    <string name="chat_support_label">Support Team</string>
+    <string name="chat_message_hint">Type a message</string>
+    <string name="chat_support_auto_reply">Thanks for reaching out! Our team will reply shortly.</string>
     <string name="auth_terms_line">By joining, you agree to our Terms of Service and Privacy Policy.</string>
     <string name="auth_terms_title">Terms of Service</string>
     <string name="auth_privacy_title">Privacy Policy</string>
@@ -183,6 +195,17 @@
     <string name="other_profile_review_time_recent">3 days ago</string>
     <string name="other_profile_review_time_last_week">Last week</string>
     <string name="other_profile_contact_button">Contact Ahmed</string>
+    <string name="other_profile_contact_info_title">Contact info</string>
+    <string name="other_profile_contact_phone_label">Phone</string>
+    <string name="other_profile_contact_email_label">Email</string>
+    <string name="other_profile_contact_location_label">Location</string>
+    <string name="other_profile_contact_status_label">Status</string>
+    <string name="other_profile_status_online">Online now</string>
+    <string name="other_profile_status_offline">Offline</string>
+    <string name="other_profile_hidden_value">Hidden</string>
+    <string name="other_profile_address_hidden">Route details hidden</string>
+    <string name="other_profile_private_title">Private profile</string>
+    <string name="other_profile_private_subtitle">This user is sharing limited details right now.</string>
 
     <!-- More -->
     <string name="more_title">More</string>
@@ -191,13 +214,123 @@
     <string name="more_login_register">Login or Register</string>
     <string name="more_company_section">Company</string>
 
+    <!-- Search -->
+    <string name="search_header">Search</string>
+    <string name="search_title">Search Everything</string>
+    <string name="search_subtitle">Find travelers, trips, and places with smart filters.</string>
+    <string name="search_placeholder">Search by name, route, or place</string>
+    <string name="search_filters_title">Filters</string>
+    <string name="search_filter_name">Traveler name</string>
+    <string name="search_filter_origin">Origin</string>
+    <string name="search_filter_destination">Destination</string>
+    <string name="search_filter_rating">Minimum rating: %1$.1f</string>
+    <string name="search_filter_verified">Verified only</string>
+    <string name="search_filter_categories">Categories</string>
+    <string name="search_filter_travelers">Travelers</string>
+    <string name="search_filter_trips">Trips</string>
+    <string name="search_filter_places">Places</string>
+    <string name="search_apply">Apply</string>
+    <string name="search_reset">Reset</string>
+    <string name="search_section_travelers">Travelers</string>
+    <string name="search_section_trips">Trips &amp; Routes</string>
+    <string name="search_section_places">Places</string>
+    <string name="search_empty_title">No results yet</string>
+    <string name="search_empty_body">Try adjusting your filters or search terms.</string>
+    <string name="search_chip_name">Name: %1$s</string>
+    <string name="search_chip_origin">From: %1$s</string>
+    <string name="search_chip_destination">To: %1$s</string>
+    <string name="search_chip_rating">Rating %1$.1f+</string>
+    <string name="search_chip_verified">Verified</string>
+
+    <!-- Sahby -->
+    <string name="sahby_title">Sahby (صاحبي)</string>
+    <string name="sahby_subtitle">AI Assistant</string>
+    <string name="sahby_clear">Clear</string>
+    <string name="sahby_input_hint">Ask Sahby anything...</string>
+    <string name="sahby_empty_title">Start a conversation</string>
+    <string name="sahby_empty_body">Ask about trips, safety, prices, or verified travelers.</string>
+    <string name="sahby_history_title">Chat history</string>
+    <string name="sahby_new_chat">New chat</string>
+    <string name="sahby_no_history">No previous chats yet.</string>
+    <string name="sahby_thread_title">Sahby Chat %1$d</string>
+    <string name="sahby_quick_find">Find travelers</string>
+    <string name="sahby_quick_safety">Safety tips</string>
+    <string name="sahby_reply_greeting">Hi! I’m Sahby. Ask me about travelers, routes, or delivery tips.</string>
+    <string name="sahby_reply_price">Prices depend on the route and package size. You can compare travelers and agree in chat.</string>
+    <string name="sahby_reply_verification">Verified profiles show ID checks and trusted accounts. Look for the verified badge.</string>
+    <string name="sahby_reply_safety">Safety first: use in‑app chat, check ratings, and confirm pickup details.</string>
+    <string name="sahby_reply_map">Use the map to find travelers heading to your destination and filter by rating.</string>
+    <string name="sahby_reply_trip">Create a clear request and confirm time, route, and package details in chat.</string>
+    <string name="sahby_reply_rating">Ratings are based on completed trips. Higher ratings indicate trusted travelers.</string>
+    <string name="sahby_reply_support">If you need help, open Support &amp; Chat and we’ll assist you.</string>
+    <string name="sahby_reply_profile">Complete your profile and verification to build trust faster.</string>
+    <string name="sahby_reply_fallback">I can help with routes, verified travelers, safety, and pricing. What do you need?</string>
+
+    <!-- Sahby Arabic replies -->
+    <string name="sahby_reply_greeting_ar">مرحباً! أنا صاحبي. اسألني عن المسافرين والمسارات أو نصائح التوصيل.</string>
+    <string name="sahby_reply_price_ar">الأسعار تعتمد على المسار وحجم الشحنة. يمكنك مقارنة المسافرين والاتفاق عبر الدردشة.</string>
+    <string name="sahby_reply_verification_ar">الملفات الموثقة تظهر التحقق من الهوية وحسابات موثوقة. ابحث عن شارة التوثيق.</string>
+    <string name="sahby_reply_safety_ar">الأمان أولاً: استخدم الدردشة داخل التطبيق، وراجع التقييمات، وثبت تفاصيل الاستلام.</string>
+    <string name="sahby_reply_map_ar">استخدم الخريطة للعثور على مسافرين متجهين لوجهتك مع فلاتر التقييم.</string>
+    <string name="sahby_reply_trip_ar">اكتب طلباً واضحاً وثبّت الوقت والمسار وتفاصيل الشحنة عبر الدردشة.</string>
+    <string name="sahby_reply_rating_ar">التقييمات مبنية على الرحلات المكتملة. التقييم الأعلى يعني مسافراً أكثر موثوقية.</string>
+    <string name="sahby_reply_support_ar">لو احتجت مساعدة، افتح صفحة الدعم وسنساعدك فوراً.</string>
+    <string name="sahby_reply_profile_ar">أكمل ملفك وتحقق من الهوية لبناء الثقة بسرعة.</string>
+    <string name="sahby_reply_fallback_ar">أقدر أساعدك في المسارات والمسافرين الموثقين والأمان والأسعار. ماذا تحتاج؟</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Manage your account details</string>
+    <string name="settings_section_personal">Personal info</string>
+    <string name="settings_section_security">Security</string>
+    <string name="settings_section_preferences">Preferences</string>
+    <string name="settings_section_visibility">Visibility &amp; privacy</string>
+    <string name="settings_label_name">Full name</string>
+    <string name="settings_label_email">Email</string>
+    <string name="settings_label_phone">Phone</string>
+    <string name="settings_label_city">City</string>
+    <string name="settings_label_bio">Bio</string>
+    <string name="settings_label_password">Password</string>
+    <string name="settings_placeholder_name">Enter your name</string>
+    <string name="settings_placeholder_email">Enter your email</string>
+    <string name="settings_placeholder_phone">Enter your phone</string>
+    <string name="settings_placeholder_city">Enter your city</string>
+    <string name="settings_placeholder_bio">Add a short bio</string>
+    <string name="settings_placeholder_password">Update password</string>
+    <string name="settings_pref_dark_mode">Dark mode</string>
+    <string name="settings_pref_dark_mode_desc">Use the dark theme</string>
+    <string name="settings_pref_language">Arabic language</string>
+    <string name="settings_pref_language_desc">Switch app language</string>
+    <string name="settings_pref_visibility">Profile visibility</string>
+    <string name="settings_pref_visibility_desc">Show your profile to senders</string>
+    <string name="settings_pref_show_phone">Show phone number</string>
+    <string name="settings_pref_show_phone_desc">Share your phone number on profile</string>
+    <string name="settings_pref_show_email">Show email address</string>
+    <string name="settings_pref_show_email_desc">Share your email with senders</string>
+    <string name="settings_pref_online_status">Online status</string>
+    <string name="settings_pref_online_status_desc">Let others see when you are online</string>
+    <string name="settings_pref_show_address">Address visibility</string>
+    <string name="settings_pref_show_address_desc">Show your city and route details</string>
+    <string name="settings_pref_show_ratings">Show ratings</string>
+    <string name="settings_pref_show_ratings_desc">Display your reviews and rating score</string>
+    <string name="settings_pref_show_trips">Show trips</string>
+    <string name="settings_pref_show_trips_desc">Share your upcoming trips</string>
+    <string name="settings_pref_notifications">Notifications</string>
+    <string name="settings_pref_notifications_desc">Get trip and message alerts</string>
+    <string name="settings_save_button">Save changes</string>
+    <string name="settings_default_name">Ahmed Ali</string>
+    <string name="settings_default_email">ahmed.ali@raheygaay.com</string>
+    <string name="settings_default_phone">+20 100 123 4567</string>
+    <string name="settings_default_city">Cairo, Egypt</string>
+    <string name="settings_default_bio">Focused on safe, on-time deliveries and clear communication.</string>
+
     <!-- Info Pages -->
     <string name="info_company_title">Company</string>
     <string name="info_company_subtitle">About our mission and team</string>
     <string name="info_about_title">About</string>
-    <string name="info_about_subtitle">What makes Rahey-Gaay different</string>
+    <string name="info_about_subtitle">What makes Rahey Gaay different</string>
     <string name="info_careers_title">Careers</string>
-    <string name="info_careers_subtitle">Join the Rahey-Gaay team</string>
+    <string name="info_careers_subtitle">Join the Rahey Gaay team</string>
     <string name="info_press_title">Press</string>
     <string name="info_press_subtitle">Latest news and press kit</string>
     <string name="info_blog_title">Blog</string>
@@ -211,7 +344,7 @@
     <string name="info_community_title">Community</string>
     <string name="info_community_subtitle">Community guidelines and tips</string>
     <string name="info_contact_title">Contact</string>
-    <string name="info_contact_subtitle">Reach the Rahey-Gaay team</string>
+    <string name="info_contact_subtitle">Reach the Rahey Gaay team</string>
     <string name="info_terms_title">Terms of Service</string>
     <string name="info_terms_subtitle">Legal terms and conditions</string>
     <string name="info_privacy_title">Privacy Policy</string>
@@ -221,10 +354,113 @@
     <string name="info_profile_title">Profile</string>
     <string name="info_profile_subtitle">Manage your account settings</string>
 
+    <!-- Info Content -->
+    <string name="info_section_key_points">Key points</string>
+    <string name="info_section_next_steps">Next steps</string>
+
+    <string name="info_company_intro">Rahey Gaay connects travelers and senders across Egypt to move packages safely, quickly, and affordably.</string>
+    <string name="info_company_key_1">Built for local routes and same-day trips.</string>
+    <string name="info_company_key_2">Verified profiles and transparent ratings.</string>
+    <string name="info_company_key_3">In-app chat keeps delivery details clear.</string>
+    <string name="info_company_next_1">Review our safety standards and policies.</string>
+    <string name="info_company_next_2">Contact us for partnerships or support.</string>
+
+    <string name="info_about_intro">Rahey Gaay is a peer-to-peer delivery network powered by trusted travelers.</string>
+    <string name="info_about_key_1">Designed around real travel schedules.</string>
+    <string name="info_about_key_2">Clear pricing and flexible delivery options.</string>
+    <string name="info_about_key_3">Community trust through verification and reviews.</string>
+    <string name="info_about_next_1">Search the map to find travelers.</string>
+    <string name="info_about_next_2">Complete your profile to build trust.</string>
+
+    <string name="info_careers_intro">We are building a safer way to deliver across Egypt. Join the mission.</string>
+    <string name="info_careers_key_1">Product, operations, and community roles.</string>
+    <string name="info_careers_key_2">Work that impacts real people every day.</string>
+    <string name="info_careers_key_3">Fast-moving, collaborative team culture.</string>
+    <string name="info_careers_next_1">Follow openings in app updates.</string>
+    <string name="info_careers_next_2">Reach out through the Contact page.</string>
+
+    <string name="info_press_intro">Media resources and story highlights for Rahey Gaay.</string>
+    <string name="info_press_key_1">Brand story and mission overview.</string>
+    <string name="info_press_key_2">Product screenshots and logos.</string>
+    <string name="info_press_key_3">Founder and team background.</string>
+    <string name="info_press_next_1">For press requests, use Contact.</string>
+    <string name="info_press_next_2">We respond with media kits promptly.</string>
+
+    <string name="info_blog_intro">Stories, tips, and highlights from our traveler community.</string>
+    <string name="info_blog_key_1">Real delivery stories across Egypt.</string>
+    <string name="info_blog_key_2">Safety tips and best practices.</string>
+    <string name="info_blog_key_3">Spotlights on top travelers.</string>
+    <string name="info_blog_next_1">Follow new posts inside the app.</string>
+    <string name="info_blog_next_2">Share your story with our team.</string>
+
+    <string name="info_support_intro">Get help with deliveries, payments, and account issues.</string>
+    <string name="info_support_key_1">In-app chat with support agents.</string>
+    <string name="info_support_key_2">Track requests and follow up easily.</string>
+    <string name="info_support_key_3">Guided help for common problems.</string>
+    <string name="info_support_next_1">Open a chat from Support.</string>
+    <string name="info_support_next_2">Check the Help Center first.</string>
+
+    <string name="info_help_center_intro">Quick answers to your most common questions.</string>
+    <string name="info_help_center_key_1">Search by topic and category.</string>
+    <string name="info_help_center_key_2">Clear steps for bookings and cancellations.</string>
+    <string name="info_help_center_key_3">Policies on safety and verification.</string>
+    <string name="info_help_center_next_1">Start with FAQs.</string>
+    <string name="info_help_center_next_2">Contact support if you need more help.</string>
+
+    <string name="info_safety_intro">Safety is at the heart of every delivery.</string>
+    <string name="info_safety_key_1">Identity verification for travelers.</string>
+    <string name="info_safety_key_2">Ratings and reviews after each trip.</string>
+    <string name="info_safety_key_3">In-app messaging keeps records.</string>
+    <string name="info_safety_next_1">Review safety tips before you ship.</string>
+    <string name="info_safety_next_2">Report any concern immediately.</string>
+
+    <string name="info_community_intro">Guidelines that keep our community respectful and reliable.</string>
+    <string name="info_community_key_1">Be clear about items and pickup times.</string>
+    <string name="info_community_key_2">Communicate updates early.</string>
+    <string name="info_community_key_3">Rate honestly and fairly.</string>
+    <string name="info_community_next_1">Follow the community guidelines.</string>
+    <string name="info_community_next_2">Help others by leaving reviews.</string>
+
+    <string name="info_contact_intro">We are here to listen and help.</string>
+    <string name="info_contact_key_1">Support chat inside the app.</string>
+    <string name="info_contact_key_2">Partnership and business requests.</string>
+    <string name="info_contact_key_3">Product feedback and suggestions.</string>
+    <string name="info_contact_next_1">Send a message from Support.</string>
+    <string name="info_contact_next_2">Share feedback in the app.</string>
+
+    <string name="info_terms_intro">A simple summary of our terms of service.</string>
+    <string name="info_terms_key_1">Users are responsible for item accuracy.</string>
+    <string name="info_terms_key_2">Certain items are prohibited from delivery.</string>
+    <string name="info_terms_key_3">Payments and disputes follow clear rules.</string>
+    <string name="info_terms_next_1">Read the full Terms in the app.</string>
+    <string name="info_terms_next_2">Contact support with questions.</string>
+
+    <string name="info_privacy_intro">Your data is protected and used with care.</string>
+    <string name="info_privacy_key_1">We collect only what we need to operate.</string>
+    <string name="info_privacy_key_2">We protect data with secure practices.</string>
+    <string name="info_privacy_key_3">You control what is visible on your profile.</string>
+    <string name="info_privacy_next_1">Manage privacy in Settings.</string>
+    <string name="info_privacy_next_2">Contact support to request changes.</string>
+
+    <string name="info_map_intro">Find travelers heading your way and connect fast.</string>
+    <string name="info_map_key_1">Search by origin, destination, and date.</string>
+    <string name="info_map_key_2">View verified profiles and ratings.</string>
+    <string name="info_map_key_3">Message travelers directly.</string>
+    <string name="info_map_next_1">Search a route on the map.</string>
+    <string name="info_map_next_2">Tap a profile to contact.</string>
+
+    <string name="info_profile_intro">Your profile is your trust signal.</string>
+    <string name="info_profile_key_1">Complete verification to stand out.</string>
+    <string name="info_profile_key_2">Show your trips and availability.</string>
+    <string name="info_profile_key_3">Collect reviews after each delivery.</string>
+    <string name="info_profile_next_1">Update your profile details.</string>
+    <string name="info_profile_next_2">Adjust visibility in Settings.</string>
+
     <!-- Names -->
     <string name="name_ahmed_ali">Ahmed Ali</string>
     <string name="name_fatma_hassan">Fatma Hassan</string>
     <string name="name_omar_mostafa">Omar Mostafa</string>
+    <string name="name_salma_nour">Salma Nour</string>
     <string name="name_ahmed_short">Ahmed</string>
     <string name="city_cairo">Cairo</string>
     <string name="city_alexandria">Alexandria</string>
@@ -232,5 +468,5 @@
     <string name="review_comment_omar">Excellent experience and consistent communication throughout the trip. Thank you Ahmed.</string>
 
     <!-- Info Body -->
-    <string name="info_body">%1$s\n\nRahey-Gaay connects travelers and senders to build a safe, trusted delivery network. Use this page to add your final copy, FAQs, and policies. Content here is ready to replace with real data once the backend and CMS are connected.\n\nHighlights\n- Clear descriptions and easy navigation.\n- Consistent typography and spacing.\n- Ready for localization in Arabic and English.</string>
+    <string name="info_body">%1$s\n\nRahey Gaay connects travelers and senders to build a safe, trusted delivery network. Use this page to add your final copy, FAQs, and policies. Content here is ready to replace with real data once the backend and CMS are connected.\n\nHighlights\n- Clear descriptions and easy navigation.\n- Consistent typography and spacing.\n- Ready for localization in Arabic and English.</string>
 </resources>

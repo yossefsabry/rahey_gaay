@@ -5,8 +5,8 @@
     <!-- Navigation -->
     <string name="nav_home">الرئيسية</string>
     <string name="nav_map">الخريطة</string>
-    <string name="nav_support">الدعم</string>
-    <string name="nav_profile">الملف الشخصي</string>
+    <string name="nav_support">المحادثات</string>
+    <string name="nav_profile">حسابي</string>
     <string name="nav_more">المزيد</string>
 
     <!-- Common -->
@@ -22,6 +22,12 @@
     <string name="common_departure_time">الانطلاق حوالي 09:00 ص</string>
     <string name="common_contact_name">تواصل مع %1$s</string>
     <string name="common_view_all">عرض الكل</string>
+    <string name="common_loading">جاري التحميل...</string>
+
+    <!-- Errors -->
+    <string name="error_generic_title">حدث خطأ ما</string>
+    <string name="error_generic_body">تحقق من الاتصال وحاول مرة أخرى.</string>
+    <string name="error_retry">أعد المحاولة</string>
 
     <!-- Home -->
     <string name="home_tagline_title">تواصل.\nسافر. وصّل.</string>
@@ -51,6 +57,8 @@
     <string name="route_giza_hurghada">الجيزة → الغردقة</string>
     <string name="home_note_ahmed">"مسافر للإسكندرية نهاية الأسبوع، يسعدني نقل الطرود الصغيرة والمتوسطة!"</string>
     <string name="home_note_fatma">"عائدة للقاهرة يوم الأحد. ملتزمة بالمواعيد وشحنتك في أمان."</string>
+    <string name="home_note_omar">"مسافر للإسكندرية اليوم ويمكنني حمل المستندات والأجهزة."</string>
+    <string name="home_note_salma">"سأعود إلى القاهرة غداً. يمكنني حمل الهدايا والطرود الصغيرة."</string>
     <string name="home_how_it_works_title">كيف يعمل %1$s</string>
     <string name="home_how_it_works_subtitle">بسيط، آمن، وموثوق في 3 خطوات</string>
     <string name="home_step_search_title">١. ابحث</string>
@@ -120,6 +128,7 @@
     <string name="streak_popup_close">تم</string>
     <string name="menu_profile">الملف الشخصي</string>
     <string name="menu_dashboard">لوحة المتابعة</string>
+    <string name="menu_sahby">صاحبي</string>
     <string name="menu_dark_mode">الوضع الداكن</string>
     <string name="menu_logout">تسجيل الخروج</string>
     <string name="more_logout">تسجيل الخروج</string>
@@ -132,6 +141,9 @@
     <string name="dashboard_chart_earnings">اتجاه الأرباح</string>
     <string name="dashboard_top_places">أكثر الأماكن زيارة</string>
     <string name="dashboard_earnings_value">%1$d جنيه</string>
+    <string name="chat_support_label">فريق الدعم</string>
+    <string name="chat_message_hint">اكتب رسالة</string>
+    <string name="chat_support_auto_reply">شكرًا لتواصلك! سيقوم فريقنا بالرد قريبًا.</string>
     <string name="auth_terms_line">بالانضمام، أنت توافق على شروط الخدمة وسياسة الخصوصية.</string>
     <string name="auth_terms_title">شروط الخدمة</string>
     <string name="auth_privacy_title">سياسة الخصوصية</string>
@@ -183,6 +195,17 @@
     <string name="other_profile_review_time_recent">منذ ٣ أيام</string>
     <string name="other_profile_review_time_last_week">الأسبوع الماضي</string>
     <string name="other_profile_contact_button">تواصل مع أحمد</string>
+    <string name="other_profile_contact_info_title">معلومات التواصل</string>
+    <string name="other_profile_contact_phone_label">الهاتف</string>
+    <string name="other_profile_contact_email_label">البريد الإلكتروني</string>
+    <string name="other_profile_contact_location_label">الموقع</string>
+    <string name="other_profile_contact_status_label">الحالة</string>
+    <string name="other_profile_status_online">متصل الآن</string>
+    <string name="other_profile_status_offline">غير متصل</string>
+    <string name="other_profile_hidden_value">مخفي</string>
+    <string name="other_profile_address_hidden">تفاصيل المسار مخفية</string>
+    <string name="other_profile_private_title">الملف خاص</string>
+    <string name="other_profile_private_subtitle">هذا المستخدم يشارك تفاصيل محدودة حالياً.</string>
 
     <!-- More -->
     <string name="more_title">المزيد</string>
@@ -190,6 +213,94 @@
     <string name="more_arabic_language">اللغة العربية</string>
     <string name="more_login_register">تسجيل الدخول أو إنشاء حساب</string>
     <string name="more_company_section">الشركة</string>
+
+    <!-- Search -->
+    <string name="search_header">بحث</string>
+    <string name="search_title">ابحث في كل شيء</string>
+    <string name="search_subtitle">اعثر على المسافرين والرحلات والأماكن بمرشحات ذكية.</string>
+    <string name="search_placeholder">ابحث بالاسم أو المسار أو المكان</string>
+    <string name="search_filters_title">الفلاتر</string>
+    <string name="search_filter_name">اسم المسافر</string>
+    <string name="search_filter_origin">نقطة الانطلاق</string>
+    <string name="search_filter_destination">الوجهة</string>
+    <string name="search_filter_rating">أقل تقييم: %1$.1f</string>
+    <string name="search_filter_verified">موثق فقط</string>
+    <string name="search_filter_categories">الفئات</string>
+    <string name="search_filter_travelers">مسافرون</string>
+    <string name="search_filter_trips">رحلات ومسارات</string>
+    <string name="search_filter_places">أماكن</string>
+    <string name="search_apply">تطبيق</string>
+    <string name="search_reset">إعادة ضبط</string>
+    <string name="search_section_travelers">المسافرون</string>
+    <string name="search_section_trips">الرحلات والمسارات</string>
+    <string name="search_section_places">الأماكن</string>
+    <string name="search_empty_title">لا توجد نتائج</string>
+    <string name="search_empty_body">جرّب تعديل الفلاتر أو كلمات البحث.</string>
+    <string name="search_chip_name">الاسم: %1$s</string>
+    <string name="search_chip_origin">من: %1$s</string>
+    <string name="search_chip_destination">إلى: %1$s</string>
+    <string name="search_chip_rating">تقييم %1$.1f+</string>
+    <string name="search_chip_verified">موثق</string>
+
+    <!-- Sahby -->
+    <string name="sahby_title">صاحبي</string>
+    <string name="sahby_subtitle">مساعد ذكي</string>
+    <string name="sahby_clear">مسح</string>
+    <string name="sahby_input_hint">اسأل صاحبي أي شيء...</string>
+    <string name="sahby_empty_title">ابدأ المحادثة</string>
+    <string name="sahby_empty_body">اسأل عن الرحلات أو الأمان أو الأسعار أو المسافرين الموثقين.</string>
+    <string name="sahby_history_title">سجل المحادثات</string>
+    <string name="sahby_new_chat">محادثة جديدة</string>
+    <string name="sahby_no_history">لا توجد محادثات سابقة.</string>
+    <string name="sahby_thread_title">محادثة صاحبي %1$d</string>
+    <string name="sahby_quick_find">ابحث عن مسافرين</string>
+    <string name="sahby_quick_safety">نصائح الأمان</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_subtitle">إدارة تفاصيل حسابك</string>
+    <string name="settings_section_personal">المعلومات الشخصية</string>
+    <string name="settings_section_security">الأمان</string>
+    <string name="settings_section_preferences">التفضيلات</string>
+    <string name="settings_section_visibility">الخصوصية والظهور</string>
+    <string name="settings_label_name">الاسم الكامل</string>
+    <string name="settings_label_email">البريد الإلكتروني</string>
+    <string name="settings_label_phone">رقم الهاتف</string>
+    <string name="settings_label_city">المدينة</string>
+    <string name="settings_label_bio">نبذة</string>
+    <string name="settings_label_password">كلمة المرور</string>
+    <string name="settings_placeholder_name">اكتب اسمك</string>
+    <string name="settings_placeholder_email">اكتب بريدك الإلكتروني</string>
+    <string name="settings_placeholder_phone">اكتب رقم هاتفك</string>
+    <string name="settings_placeholder_city">اكتب مدينتك</string>
+    <string name="settings_placeholder_bio">أضف نبذة قصيرة</string>
+    <string name="settings_placeholder_password">تحديث كلمة المرور</string>
+    <string name="settings_pref_dark_mode">الوضع الداكن</string>
+    <string name="settings_pref_dark_mode_desc">استخدم المظهر الداكن</string>
+    <string name="settings_pref_language">اللغة العربية</string>
+    <string name="settings_pref_language_desc">تبديل لغة التطبيق</string>
+    <string name="settings_pref_visibility">إظهار الملف</string>
+    <string name="settings_pref_visibility_desc">إظهار ملفك للمرسلين</string>
+    <string name="settings_pref_show_phone">إظهار رقم الهاتف</string>
+    <string name="settings_pref_show_phone_desc">مشاركة رقم هاتفك في الملف</string>
+    <string name="settings_pref_show_email">إظهار البريد الإلكتروني</string>
+    <string name="settings_pref_show_email_desc">مشاركة بريدك الإلكتروني مع المرسلين</string>
+    <string name="settings_pref_online_status">حالة الاتصال</string>
+    <string name="settings_pref_online_status_desc">السماح للآخرين برؤية حالتك</string>
+    <string name="settings_pref_show_address">إظهار العنوان</string>
+    <string name="settings_pref_show_address_desc">عرض المدينة وتفاصيل المسار</string>
+    <string name="settings_pref_show_ratings">إظهار التقييمات</string>
+    <string name="settings_pref_show_ratings_desc">عرض المراجعات ودرجة التقييم</string>
+    <string name="settings_pref_show_trips">إظهار الرحلات</string>
+    <string name="settings_pref_show_trips_desc">مشاركة الرحلات القادمة</string>
+    <string name="settings_pref_notifications">الإشعارات</string>
+    <string name="settings_pref_notifications_desc">تنبيهات الرحلات والرسائل</string>
+    <string name="settings_save_button">حفظ التغييرات</string>
+    <string name="settings_default_name">أحمد علي</string>
+    <string name="settings_default_email">ahmed.ali@raheygaay.com</string>
+    <string name="settings_default_phone">+20 100 123 4567</string>
+    <string name="settings_default_city">القاهرة، مصر</string>
+    <string name="settings_default_bio">مركز على توصيلات آمنة وفي الوقت المناسب وتواصل واضح.</string>
 
     <!-- Info Pages -->
     <string name="info_company_title">الشركة</string>
@@ -221,10 +332,113 @@
     <string name="info_profile_title">الملف الشخصي</string>
     <string name="info_profile_subtitle">إدارة إعدادات حسابك</string>
 
+    <!-- Info Content -->
+    <string name="info_section_key_points">أبرز النقاط</string>
+    <string name="info_section_next_steps">الخطوات التالية</string>
+
+    <string name="info_company_intro">راهي جاي تربط المسافرين بالمرسلين داخل مصر لتوصيل الشحنات بأمان وسرعة وبسعر مناسب.</string>
+    <string name="info_company_key_1">مصممة للرحلات المحلية والتوصيل السريع.</string>
+    <string name="info_company_key_2">ملفات موثقة وتقييمات واضحة.</string>
+    <string name="info_company_key_3">محادثات داخل التطبيق لتفاصيل دقيقة.</string>
+    <string name="info_company_next_1">اطلع على معايير الأمان والسياسات.</string>
+    <string name="info_company_next_2">تواصل معنا للشراكات أو الدعم.</string>
+
+    <string name="info_about_intro">راهي جاي شبكة توصيل بين الأفراد تعتمد على مسافرين موثوقين.</string>
+    <string name="info_about_key_1">مبنية على جداول سفر حقيقية.</string>
+    <string name="info_about_key_2">أسعار واضحة وخيارات مرنة.</string>
+    <string name="info_about_key_3">ثقة المجتمع عبر التحقق والمراجعات.</string>
+    <string name="info_about_next_1">ابحث عن مسافرين عبر الخريطة.</string>
+    <string name="info_about_next_2">أكمل ملفك لتعزيز الثقة.</string>
+
+    <string name="info_careers_intro">نحن نبني طريقة أكثر أماناً للتوصيل في مصر. انضم إلى الرسالة.</string>
+    <string name="info_careers_key_1">فرص في المنتج والعمليات والمجتمع.</string>
+    <string name="info_careers_key_2">عمل مؤثر يخدم الناس يومياً.</string>
+    <string name="info_careers_key_3">فريق سريع ومتعاون.</string>
+    <string name="info_careers_next_1">تابع فرص العمل عبر تحديثات التطبيق.</string>
+    <string name="info_careers_next_2">تواصل معنا من صفحة التواصل.</string>
+
+    <string name="info_press_intro">موارد إعلامية ونبذة عن راهي جاي للصحافة.</string>
+    <string name="info_press_key_1">قصة العلامة ورسالتها.</string>
+    <string name="info_press_key_2">لقطات وصور للمنتج والشعارات.</string>
+    <string name="info_press_key_3">معلومات عن المؤسسين والفريق.</string>
+    <string name="info_press_next_1">لطلبات الصحافة استخدم صفحة التواصل.</string>
+    <string name="info_press_next_2">نرد بحزمة إعلامية بسرعة.</string>
+
+    <string name="info_blog_intro">قصص ونصائح من مجتمع المسافرين.</string>
+    <string name="info_blog_key_1">قصص توصيل حقيقية من أنحاء مصر.</string>
+    <string name="info_blog_key_2">نصائح أمان وأفضل الممارسات.</string>
+    <string name="info_blog_key_3">تسليط الضوء على مسافرين مميزين.</string>
+    <string name="info_blog_next_1">تابع التحديثات داخل التطبيق.</string>
+    <string name="info_blog_next_2">شارك قصتك مع الفريق.</string>
+
+    <string name="info_support_intro">مساعدة للرحلات والدفع ومشاكل الحساب.</string>
+    <string name="info_support_key_1">محادثة دعم داخل التطبيق.</string>
+    <string name="info_support_key_2">متابعة الطلبات بسهولة.</string>
+    <string name="info_support_key_3">إرشادات واضحة للمشكلات الشائعة.</string>
+    <string name="info_support_next_1">افتح محادثة من صفحة الدعم.</string>
+    <string name="info_support_next_2">ابدأ بمركز المساعدة.</string>
+
+    <string name="info_help_center_intro">إجابات سريعة للأسئلة الأكثر شيوعاً.</string>
+    <string name="info_help_center_key_1">بحث حسب الموضوع والفئة.</string>
+    <string name="info_help_center_key_2">خطوات واضحة للحجز والإلغاء.</string>
+    <string name="info_help_center_key_3">سياسات الأمان والتحقق.</string>
+    <string name="info_help_center_next_1">ابدأ بالأسئلة الشائعة.</string>
+    <string name="info_help_center_next_2">تواصل مع الدعم عند الحاجة.</string>
+
+    <string name="info_safety_intro">الأمان في قلب كل عملية توصيل.</string>
+    <string name="info_safety_key_1">تحقق الهوية للمسافرين.</string>
+    <string name="info_safety_key_2">تقييمات ومراجعات بعد كل رحلة.</string>
+    <string name="info_safety_key_3">محادثات داخل التطبيق محفوظة.</string>
+    <string name="info_safety_next_1">راجع نصائح الأمان قبل الشحن.</string>
+    <string name="info_safety_next_2">أبلغ عن أي مشكلة فوراً.</string>
+
+    <string name="info_community_intro">إرشادات تحافظ على مجتمع محترم وموثوق.</string>
+    <string name="info_community_key_1">وضوح في تفاصيل الشحنة والموعد.</string>
+    <string name="info_community_key_2">تواصل مبكر عند أي تغيير.</string>
+    <string name="info_community_key_3">تقييمات عادلة وصادقة.</string>
+    <string name="info_community_next_1">اتبع إرشادات المجتمع.</string>
+    <string name="info_community_next_2">ساعد الآخرين بترك مراجعة.</string>
+
+    <string name="info_contact_intro">نحن هنا للاستماع والمساعدة.</string>
+    <string name="info_contact_key_1">دعم داخل التطبيق.</string>
+    <string name="info_contact_key_2">طلبات الشراكات والأعمال.</string>
+    <string name="info_contact_key_3">ملاحظات وتحسينات المنتج.</string>
+    <string name="info_contact_next_1">أرسل رسالة من الدعم.</string>
+    <string name="info_contact_next_2">شارك ملاحظاتك في التطبيق.</string>
+
+    <string name="info_terms_intro">ملخص مبسط لشروط الخدمة.</string>
+    <string name="info_terms_key_1">المستخدم مسؤول عن دقة محتوى الشحنة.</string>
+    <string name="info_terms_key_2">هناك مواد محظورة من التوصيل.</string>
+    <string name="info_terms_key_3">الدفع والنزاعات وفق قواعد واضحة.</string>
+    <string name="info_terms_next_1">اقرأ الشروط كاملة داخل التطبيق.</string>
+    <string name="info_terms_next_2">تواصل مع الدعم لأي استفسار.</string>
+
+    <string name="info_privacy_intro">بياناتك محمية وتستخدم بعناية.</string>
+    <string name="info_privacy_key_1">نجمع فقط ما يلزم لتشغيل الخدمة.</string>
+    <string name="info_privacy_key_2">نحمي البيانات بممارسات آمنة.</string>
+    <string name="info_privacy_key_3">يمكنك التحكم بما يظهر في ملفك.</string>
+    <string name="info_privacy_next_1">إدارة الخصوصية من الإعدادات.</string>
+    <string name="info_privacy_next_2">تواصل مع الدعم لطلبات التعديل.</string>
+
+    <string name="info_map_intro">اعثر على مسافرين متجهين لوجهتك بسرعة.</string>
+    <string name="info_map_key_1">ابحث حسب المصدر والوجهة والتاريخ.</string>
+    <string name="info_map_key_2">اطلع على الملفات الموثقة والتقييمات.</string>
+    <string name="info_map_key_3">راسل المسافرين مباشرة.</string>
+    <string name="info_map_next_1">ابحث عن مسار على الخريطة.</string>
+    <string name="info_map_next_2">اضغط على ملف المسافر للتواصل.</string>
+
+    <string name="info_profile_intro">ملفك هو مؤشر الثقة لديك.</string>
+    <string name="info_profile_key_1">أكمل التحقق لزيادة الثقة.</string>
+    <string name="info_profile_key_2">اعرض رحلاتك وتوافرك.</string>
+    <string name="info_profile_key_3">احصل على تقييمات بعد كل توصيل.</string>
+    <string name="info_profile_next_1">حدّث تفاصيل ملفك.</string>
+    <string name="info_profile_next_2">اضبط الخصوصية من الإعدادات.</string>
+
     <!-- Names -->
     <string name="name_ahmed_ali">أحمد علي</string>
     <string name="name_fatma_hassan">فاطمة حسن</string>
     <string name="name_omar_mostafa">عمر مصطفى</string>
+    <string name="name_salma_nour">سلمى نور</string>
     <string name="name_ahmed_short">أحمد</string>
     <string name="city_cairo">القاهرة</string>
     <string name="city_alexandria">الإسكندرية</string>

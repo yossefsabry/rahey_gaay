@@ -19,9 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 
 @Composable
 fun PrimaryButton(
@@ -34,9 +36,13 @@ fun PrimaryButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(if (pressed) 0.97f else 1f, label = "primaryPress")
+    val haptic = LocalHapticFeedback.current
 
     Button(
-        onClick = onClick,
+        onClick = {
+            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            onClick()
+        },
         modifier = modifier.graphicsLayer(scaleX = scale, scaleY = scale),
         interactionSource = interactionSource,
         enabled = enabled,
@@ -66,9 +72,13 @@ fun SecondaryButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(if (pressed) 0.97f else 1f, label = "secondaryPress")
+    val haptic = LocalHapticFeedback.current
 
     OutlinedButton(
-        onClick = onClick,
+        onClick = {
+            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            onClick()
+        },
         modifier = modifier.graphicsLayer(scaleX = scale, scaleY = scale),
         interactionSource = interactionSource,
         shape = RoundedCornerShape(4.dp)

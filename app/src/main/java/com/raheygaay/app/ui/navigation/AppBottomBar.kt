@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -17,10 +19,12 @@ fun AppBottomBar(
     navController: NavHostController,
     routes: List<AppRoute>,
     isLoggedIn: Boolean,
-    onAuthRequired: (AppRoute) -> Unit
+    onAuthRequired: (AppRoute) -> Unit,
+    onNavigate: (AppRoute) -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val haptic = LocalHapticFeedback.current
     val visibleRoutes = if (isLoggedIn) {
         routes
     } else {
@@ -35,19 +39,11 @@ fun AppBottomBar(
             NavigationBarItem(
                 selected = selected,
                 onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     if (!isLoggedIn && route.route !in setOf(AppRoute.Home.route, AppRoute.Map.route, AppRoute.More.route)) {
                         onAuthRequired(route)
                     } else {
-                        val navigated = navController.popBackStack(route.route, inclusive = false)
-                        if (!navigated) {
-                            navController.navigate(route.route) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(AppRoute.Home.route) {
-                                    saveState = true
-                                }
-                            }
-                        }
+                        onNavigate(route)
                     }
                 },
                 icon = {

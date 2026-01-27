@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.automirrored.outlined.ShowChart
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Dashboard
@@ -38,6 +40,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -75,6 +78,7 @@ import com.raheygaay.app.data.model.Traveler
 import com.raheygaay.app.data.model.WhyChooseReason
 import com.raheygaay.app.data.model.WhyChooseReasonType
 import com.raheygaay.app.ui.components.BrandLogo
+import com.raheygaay.app.ui.components.InlineNavProgress
 import com.raheygaay.app.ui.components.NetworkImage
 import com.raheygaay.app.ui.components.PrimaryButton
 import com.raheygaay.app.ui.theme.BrandMint
@@ -85,6 +89,8 @@ internal fun HomeHeader(
     isLoggedIn: Boolean,
     isGuest: Boolean,
     onOpenProfile: () -> Unit,
+    onOpenSearch: () -> Unit,
+    onOpenSahby: () -> Unit,
     onOpenDashboard: () -> Unit,
     onToggleDark: () -> Unit,
     onLogout: () -> Unit,
@@ -99,123 +105,155 @@ internal fun HomeHeader(
     Surface(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
         tonalElevation = 0.dp,
-        shadowElevation = 6.dp
+        shadowElevation = 4.dp
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    BrandLogo(modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onPrimary)
-                }
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = appName,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                if (isGuest) {
-                    Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 14.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .background(
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                                RoundedCornerShape(10.dp)
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.primary),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        BrandLogo(modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = appName,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    if (isGuest) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.guest_badge),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
                             )
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                        }
+                    }
+                }
+            if (isLoggedIn) {
+                val pillBorder = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
+                Row(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(18.dp))
+                        .border(1.dp, pillBorder, RoundedCornerShape(18.dp))
+                        .padding(horizontal = 6.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = onOpenSearch,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Search,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .height(18.dp)
+                            .width(1.dp)
+                            .background(pillBorder)
+                    )
+                    Box {
+                        IconButton(
+                            onClick = { menuExpanded.value = true },
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.PersonOutline,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = menuExpanded.value,
+                            onDismissRequest = { menuExpanded.value = false },
+                            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.menu_profile)) },
+                                leadingIcon = { Icon(imageVector = Icons.Outlined.PersonOutline, contentDescription = null) },
+                                onClick = {
+                                    menuExpanded.value = false
+                                    onOpenProfile()
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.menu_dashboard)) },
+                                leadingIcon = { Icon(imageVector = Icons.Outlined.Dashboard, contentDescription = null) },
+                                onClick = {
+                                    menuExpanded.value = false
+                                    onOpenDashboard()
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.menu_sahby)) },
+                                leadingIcon = { Icon(imageVector = Icons.Outlined.AutoAwesome, contentDescription = null) },
+                                onClick = {
+                                    menuExpanded.value = false
+                                    onOpenSahby()
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.menu_dark_mode)) },
+                                leadingIcon = { Icon(imageVector = Icons.Outlined.DarkMode, contentDescription = null) },
+                                trailingIcon = {
+                                    Switch(checked = isDark, onCheckedChange = { handleDarkToggle() })
+                                },
+                                onClick = { handleDarkToggle() }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.menu_logout)) },
+                                leadingIcon = { Icon(imageVector = Icons.AutoMirrored.Outlined.Logout, contentDescription = null) },
+                                onClick = {
+                                    menuExpanded.value = false
+                                    onLogout()
+                                }
+                            )
+                        }
+                    }
+                }
+            } else {
+                    Button(
+                        onClick = onOpenAuth,
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            contentColor = MaterialTheme.colorScheme.primary
+                        ),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.guest_badge),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
+                            text = stringResource(R.string.home_sign_in_up),
+                            style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
-            if (isLoggedIn) {
-                Box {
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                            .clickable { menuExpanded.value = true },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.PersonOutline,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = menuExpanded.value,
-                        onDismissRequest = { menuExpanded.value = false },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.menu_profile)) },
-                            leadingIcon = { Icon(imageVector = Icons.Outlined.PersonOutline, contentDescription = null) },
-                            onClick = {
-                                menuExpanded.value = false
-                                onOpenProfile()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.menu_dashboard)) },
-                            leadingIcon = { Icon(imageVector = Icons.Outlined.Dashboard, contentDescription = null) },
-                            onClick = {
-                                menuExpanded.value = false
-                                onOpenDashboard()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.menu_dark_mode)) },
-                            leadingIcon = { Icon(imageVector = Icons.Outlined.DarkMode, contentDescription = null) },
-                            trailingIcon = {
-                                Switch(checked = isDark, onCheckedChange = { handleDarkToggle() })
-                            },
-                            onClick = { handleDarkToggle() }
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.menu_logout)) },
-                            leadingIcon = { Icon(imageVector = Icons.AutoMirrored.Outlined.Logout, contentDescription = null) },
-                            onClick = {
-                                menuExpanded.value = false
-                                onLogout()
-                            }
-                        )
-                    }
-                }
-            } else {
-                Button(
-                    onClick = onOpenAuth,
-                    shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                        contentColor = MaterialTheme.colorScheme.primary
-                    ),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.home_sign_in_up),
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+            InlineNavProgress(modifier = Modifier.padding(horizontal = 20.dp))
         }
     }
 }
@@ -259,7 +297,7 @@ internal fun FeatureSection(features: List<HomeFeature>) {
             Surface(
                 color = MaterialTheme.colorScheme.surface,
                 shape = MaterialTheme.shapes.extraLarge,
-                shadowElevation = 4.dp,
+                shadowElevation = 2.dp,
                 tonalElevation = 0.dp
             ) {
                 Row(
@@ -361,7 +399,7 @@ private fun StatCard(
     val contentColor = if (highlight) Color.White else MaterialTheme.colorScheme.onSurface
     val surfaceColor = if (highlight) BrandMint else MaterialTheme.colorScheme.surface
     val borderColor = if (highlight) Color.Transparent else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-    val shadow = if (highlight) 10.dp else 4.dp
+    val shadow = if (highlight) 6.dp else 2.dp
 
     Surface(
         modifier = modifier,
@@ -407,7 +445,7 @@ internal fun LiveConnectionsSection(connections: List<LiveConnection>) {
             .padding(horizontal = 20.dp),
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 6.dp,
+        shadowElevation = 2.dp,
         tonalElevation = 0.dp
     ) {
         Column(
@@ -496,7 +534,7 @@ private fun ProgressBar(color: Color, progress: Float) {
 internal fun FeaturedTravelersSection(
     travelers: List<Traveler>,
     onSeeAll: () -> Unit,
-    onContact: () -> Unit
+    onContact: (Traveler) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -538,14 +576,77 @@ internal fun FeaturedTravelersSection(
 }
 
 @Composable
+internal fun FeaturedTravelersHeader() {
+    val background = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(background)
+            .padding(horizontal = 20.dp, vertical = 20.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.home_featured_title),
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.home_featured_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+    }
+}
+
+@Composable
+internal fun FeaturedTravelerItem(
+    traveler: Traveler,
+    onContact: (Traveler) -> Unit,
+    addSpacing: Boolean = true
+) {
+    val background = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(background)
+            .padding(horizontal = 20.dp)
+    ) {
+        TravelerCard(traveler = traveler, onContact = onContact)
+        if (addSpacing) {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+internal fun FeaturedTravelersFooter(onSeeAll: () -> Unit) {
+    val background = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(background)
+            .padding(horizontal = 20.dp, vertical = 20.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.home_featured_view_all),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.clickable { onSeeAll() }
+        )
+    }
+}
+
+@Composable
 private fun TravelerCard(
     traveler: Traveler,
-    onContact: () -> Unit
+    onContact: (Traveler) -> Unit
 ) {
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 6.dp,
+        shadowElevation = 2.dp,
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -557,6 +658,7 @@ private fun TravelerCard(
                 NetworkImage(
                     url = traveler.avatarUrl,
                     contentDescription = stringResource(traveler.nameRes),
+                    size = 60.dp,
                     modifier = Modifier
                         .size(60.dp)
                         .clip(RoundedCornerShape(20.dp))
@@ -644,7 +746,7 @@ private fun TravelerCard(
             }
             PrimaryButton(
                 text = stringResource(R.string.common_contact_name, stringResource(traveler.nameRes)),
-                onClick = onContact,
+                onClick = { onContact(traveler) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -659,19 +761,22 @@ internal fun HowItWorksSection(appName: String, steps: List<HowItWorksStep>) {
     } else {
         MaterialTheme.colorScheme.surfaceVariant
     }
-    val glow = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-            Color.Transparent
+    val primary = MaterialTheme.colorScheme.primary
+    val glow = remember(primary) {
+        Brush.verticalGradient(
+            colors = listOf(
+                primary.copy(alpha = 0.12f),
+                Color.Transparent
+            )
         )
-    )
+    }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
         color = panelColor,
         shape = MaterialTheme.shapes.extraLarge,
-        shadowElevation = 6.dp,
+        shadowElevation = 2.dp,
         tonalElevation = 0.dp
     ) {
         Box(modifier = Modifier.background(glow)) {
@@ -780,15 +885,18 @@ private fun StepCard(step: HowItWorksStep, isLast: Boolean) {
 internal fun WhyChooseSection(appName: String, reasons: List<WhyChooseReason>) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.4f
     val baseSurface = if (isDark) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant
-    val glow = Brush.radialGradient(
-        colors = listOf(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f), Color.Transparent),
-        radius = 520f
-    )
+    val primary = MaterialTheme.colorScheme.primary
+    val glow = remember(primary) {
+        Brush.radialGradient(
+            colors = listOf(primary.copy(alpha = 0.14f), Color.Transparent),
+            radius = 520f
+        )
+    }
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Surface(
             color = baseSurface,
             shape = MaterialTheme.shapes.extraLarge,
-            shadowElevation = 6.dp,
+            shadowElevation = 2.dp,
             tonalElevation = 0.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -870,7 +978,7 @@ internal fun SearchBar(
     Surface(
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(30.dp),
-        shadowElevation = 6.dp,
+        shadowElevation = 2.dp,
         tonalElevation = 0.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -892,13 +1000,16 @@ internal fun SearchBar(
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .height(46.dp),
+                    .heightIn(min = 52.dp),
                 singleLine = true,
+                textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = { onSearch() }),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = MaterialTheme.colorScheme.primary

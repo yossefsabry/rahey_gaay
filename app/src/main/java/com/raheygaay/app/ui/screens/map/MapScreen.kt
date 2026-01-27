@@ -28,7 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,12 +42,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.imePadding
+import com.raheygaay.app.BuildConfig
 import com.raheygaay.app.R
 import com.raheygaay.app.data.model.MapTraveler
 import com.raheygaay.app.ui.components.AppTextField
+import com.raheygaay.app.ui.components.ErrorState
 import com.raheygaay.app.ui.components.GlassCard
 import com.raheygaay.app.ui.components.NetworkImage
 import com.raheygaay.app.ui.components.PrimaryButton
+import com.raheygaay.app.ui.components.SkeletonBlock
 import com.raheygaay.app.ui.theme.BrandMint
 import com.raheygaay.app.ui.theme.primaryGradientBrush
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,35 +58,41 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun MapScreen(
     onContact: () -> Unit,
+    showSkeleton: Boolean = false,
     viewModel: MapViewModel = hiltViewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val content = uiState.value.content
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val state = uiState.value
+    val content = state.content
+    val showSkeletonState = showSkeleton || (state.isLoading && content == null)
     if (content == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.material3.CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        if (showSkeletonState) {
+            MapSkeleton()
+        } else {
+            ErrorState(
+                title = stringResource(R.string.error_generic_title),
+                message = stringResource(R.string.error_generic_body),
+                buttonText = stringResource(R.string.error_retry),
+                onRetry = { viewModel.retry() },
+                details = if (BuildConfig.DEBUG) state.errorMessage else null
+            )
         }
         return
+    }
+    val background = MaterialTheme.colorScheme.background
+    val isDark = background.luminance() < 0.4f
+    val mapBackground = remember(isDark, background) {
+        val colors = if (isDark) {
+            listOf(Color(0xFF1E293B), Color(0xFF0F172A), background)
+        } else {
+            listOf(Color(0xFFE0F2FE), Color(0xFFF0F9FF), background)
+        }
+        Brush.radialGradient(colors = colors)
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                run {
-                    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.4f
-                    val colors = if (isDark) {
-                        listOf(Color(0xFF1E293B), Color(0xFF0F172A), MaterialTheme.colorScheme.background)
-                    } else {
-                        listOf(Color(0xFFE0F2FE), Color(0xFFF0F9FF), MaterialTheme.colorScheme.background)
-                    }
-                    Brush.radialGradient(colors = colors)
-                }
-            )
+            .background(mapBackground)
     ) {
         MapMarkers()
         Column(modifier = Modifier.fillMaxSize().imePadding()) {
@@ -93,6 +102,48 @@ fun MapScreen(
             FloatingActions()
             Spacer(modifier = Modifier.height(12.dp))
             TravelerBottomSheet(traveler = content.traveler, onContact = onContact)
+        }
+        if (showSkeleton) {
+            MapSkeleton()
+        }
+    }
+}
+
+@Composable
+private fun MapSkeleton() {
+    val background = MaterialTheme.colorScheme.background
+    val isDark = background.luminance() < 0.4f
+    val mapBackground = remember(isDark, background) {
+        val colors = if (isDark) {
+            listOf(Color(0xFF1E293B), Color(0xFF0F172A), background)
+        } else {
+            listOf(Color(0xFFE0F2FE), Color(0xFFF0F9FF), background)
+        }
+        Brush.radialGradient(colors = colors)
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(mapBackground)
+    ) {
+        Column(modifier = Modifier.fillMaxSize().imePadding()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            SkeletonBlock(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(64.dp),
+                shape = RoundedCornerShape(22.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            SkeletonBlock(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(220.dp),
+                shape = RoundedCornerShape(28.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
@@ -217,6 +268,7 @@ private fun MapMarker(
             NetworkImage(
                 url = imageUrl,
                 contentDescription = name,
+                size = 46.dp,
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(CircleShape)
@@ -264,6 +316,7 @@ private fun TravelerBottomSheet(
                     NetworkImage(
                         url = traveler.avatarUrl,
                         contentDescription = stringResource(traveler.nameRes),
+                        size = 64.dp,
                         modifier = Modifier
                             .size(64.dp)
                             .clip(RoundedCornerShape(16.dp))

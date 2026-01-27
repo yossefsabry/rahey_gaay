@@ -15,13 +15,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,46 +37,50 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.raheygaay.app.BuildConfig
 import com.raheygaay.app.R
 import com.raheygaay.app.data.model.DashboardContent
 import com.raheygaay.app.data.model.DashboardPlace
+import com.raheygaay.app.ui.components.ErrorState
+import com.raheygaay.app.ui.components.SkeletonBlock
+import com.raheygaay.app.ui.components.SkeletonTextLine
 
 @Composable
 fun DashboardScreen(
+    onBack: () -> Unit,
+    showSkeleton: Boolean = false,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
-    val content = uiState.value.content
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val state = uiState.value
+    val content = state.content
+    val showSkeletonState = showSkeleton || (state.isLoading && content == null)
     if (content == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.material3.CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        if (showSkeletonState) {
+            DashboardSkeleton()
+        } else {
+            ErrorState(
+                title = stringResource(R.string.error_generic_title),
+                message = stringResource(R.string.error_generic_body),
+                buttonText = stringResource(R.string.error_retry),
+                onRetry = { viewModel.retry() },
+                details = if (BuildConfig.DEBUG) state.errorMessage else null
+            )
         }
         return
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    val listState = rememberLazyListState()
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         item {
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = stringResource(R.string.dashboard_title),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(R.string.dashboard_subtitle),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
+            DashboardHeader(onBack = onBack)
         }
         item {
             SummaryRow(content)
@@ -95,10 +104,94 @@ fun DashboardScreen(
                 fontWeight = FontWeight.Bold
             )
         }
-        items(content.topPlaces) { place ->
+        items(content.topPlaces, key = { it.nameRes }) { place ->
             PlaceRow(place = place)
         }
-        item { Spacer(modifier = Modifier.height(96.dp)) }
+            item { Spacer(modifier = Modifier.height(96.dp)) }
+        }
+        if (showSkeleton) {
+            DashboardSkeleton()
+        }
+    }
+}
+
+@Composable
+private fun DashboardSkeleton() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            SkeletonBlock(
+                modifier = Modifier
+                    .size(36.dp),
+                shape = RoundedCornerShape(12.dp)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                SkeletonTextLine(widthFraction = 0.5f, height = 18.dp)
+                SkeletonTextLine(widthFraction = 0.65f, height = 12.dp)
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            SkeletonBlock(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(70.dp),
+                shape = RoundedCornerShape(18.dp)
+            )
+            SkeletonBlock(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(70.dp),
+                shape = RoundedCornerShape(18.dp)
+            )
+        }
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp),
+            shape = RoundedCornerShape(22.dp)
+        )
+        repeat(2) {
+            SkeletonBlock(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                shape = RoundedCornerShape(18.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(80.dp))
+    }
+}
+
+@Composable
+private fun DashboardHeader(onBack: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onBack) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = stringResource(R.string.dashboard_title),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = stringResource(R.string.dashboard_subtitle),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
     }
 }
 
@@ -233,7 +326,8 @@ private fun LineChart(values: List<Int>) {
 private fun PlaceRow(place: DashboardPlace) {
     Card(
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier

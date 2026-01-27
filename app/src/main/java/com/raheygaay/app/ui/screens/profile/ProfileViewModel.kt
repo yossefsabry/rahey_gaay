@@ -28,6 +28,11 @@ class ProfileViewModel @Inject constructor(
         loadProfile()
     }
 
+    fun retry() {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        loadProfile()
+    }
+
     private fun loadProfile() {
         viewModelScope.launch {
             runCatching { repository.getProfile() }
@@ -35,7 +40,10 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = ProfileUiState(isLoading = false, profile = profile)
                 }
                 .onFailure {
-                    _uiState.value = ProfileUiState(isLoading = false, errorMessage = "profile")
+                    _uiState.value = ProfileUiState(
+                        isLoading = false,
+                        errorMessage = it.localizedMessage ?: "profile"
+                    )
                 }
         }
     }

@@ -11,6 +11,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
@@ -19,19 +21,39 @@ import kotlinx.coroutines.launch
 class StreakViewModel @Inject constructor(
     private val repository: StreakRepository
 ) : ViewModel() {
-    val streakState: StateFlow<StreakState> = repository.streakFlow
+    private val ownerKey = MutableStateFlow<String?>(null)
+
+    val streakState: StateFlow<StreakState> = ownerKey
+        .flatMapLatest { key ->
+            if (key.isNullOrBlank()) {
+                flowOf(StreakState())
+            } else {
+                repository.streakFlow(key)
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StreakState())
 
     private val _popupVisible = MutableStateFlow(false)
     val popupVisible: StateFlow<Boolean> = _popupVisible.asStateFlow()
 
     private var hasStarted = false
+    private var activeOwnerKey: String? = null
+
+    fun setOwnerKey(key: String?) {
+        if (activeOwnerKey == key) return
+        activeOwnerKey = key
+        ownerKey.value = key
+        hasStarted = false
+        _popupVisible.value = false
+    }
 
     fun onAppOpened() {
         if (hasStarted) return
+        val key = ownerKey.value
+        if (key.isNullOrBlank()) return
         hasStarted = true
         viewModelScope.launch {
-            val updated = repository.updateOnAppOpen()
+            val updated = repository.updateOnAppOpen(key)
             if (shouldShowPopup(updated)) {
                 delay(20_000)
                 _popupVisible.value = true
@@ -41,8 +63,11 @@ class StreakViewModel @Inject constructor(
 
     fun dismissPopup() {
         viewModelScope.launch {
+            val key = ownerKey.value
             val today = LocalDate.now().toEpochDay()
-            repository.markPopupShown(today)
+            if (!key.isNullOrBlank()) {
+                repository.markPopupShown(key, today)
+            }
             _popupVisible.value = false
         }
     }

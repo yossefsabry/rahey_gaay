@@ -23,6 +23,11 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -37,55 +42,64 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.raheygaay.app.R
 import com.raheygaay.app.data.model.CredentialType
 import com.raheygaay.app.data.model.OtherProfile
 import com.raheygaay.app.data.model.ProfileCredential
 import com.raheygaay.app.data.model.ProfileReview
+import com.raheygaay.app.ui.components.InlineNavProgress
 import com.raheygaay.app.ui.components.NetworkImage
 import com.raheygaay.app.ui.components.PrimaryButton
 
 @Composable
 internal fun OtherProfileHeader(onBack: () -> Unit) {
     Surface(shadowElevation = 1.dp) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                contentDescription = null,
+        Column {
+            Row(
                 modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable { onBack() }
-                    .padding(6.dp)
-            )
-            Text(
-                text = stringResource(R.string.other_profile_title),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Icon(
-                imageVector = Icons.Outlined.Share,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(6.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable { onBack() }
+                        .padding(6.dp)
+                )
+                Text(
+                    text = stringResource(R.string.other_profile_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Icon(
+                    imageVector = Icons.Outlined.Share,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(6.dp)
+                )
+            }
+            InlineNavProgress(modifier = Modifier.padding(horizontal = 20.dp))
         }
     }
 }
 
 @Composable
-internal fun OtherProfileCard(profile: OtherProfile) {
+internal fun OtherProfileCard(
+    profile: OtherProfile,
+    showRatings: Boolean,
+    showTrips: Boolean
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,6 +114,7 @@ internal fun OtherProfileCard(profile: OtherProfile) {
             NetworkImage(
                 url = profile.avatarUrl,
                 contentDescription = stringResource(profile.nameRes),
+                size = 96.dp,
                 modifier = Modifier
                     .size(96.dp)
                     .clip(CircleShape)
@@ -115,32 +130,36 @@ internal fun OtherProfileCard(profile: OtherProfile) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xFFFEF3C7))
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Outlined.Star, contentDescription = null, tint = Color(0xFFF59E0B))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = profile.rating, fontWeight = FontWeight.Bold, color = Color(0xFFB45309))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = stringResource(profile.ratingCountRes), style = MaterialTheme.typography.labelSmall)
+            if (showRatings) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFEF3C7))
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(imageVector = Icons.Outlined.Star, contentDescription = null, tint = Color(0xFFF59E0B))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = profile.rating, fontWeight = FontWeight.Bold, color = Color(0xFFB45309))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = stringResource(profile.ratingCountRes), style = MaterialTheme.typography.labelSmall)
+                }
             }
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                StatChip(
-                    label = stringResource(R.string.other_profile_trips_label),
-                    value = profile.tripsCount,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                StatChip(
-                    label = stringResource(R.string.other_profile_deliveries_label),
-                    value = profile.deliveriesCount,
-                    color = Color(0xFF22C55E)
-                )
+            if (showTrips) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    StatChip(
+                        label = stringResource(R.string.other_profile_trips_label),
+                        value = profile.tripsCount,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    StatChip(
+                        label = stringResource(R.string.other_profile_deliveries_label),
+                        value = profile.deliveriesCount,
+                        color = Color(0xFF22C55E)
+                    )
+                }
             }
         }
     }
@@ -161,7 +180,11 @@ private fun StatChip(label: String, value: String, color: Color) {
 }
 
 @Composable
-internal fun NextTripCard(profile: OtherProfile) {
+internal fun NextTripCard(
+    profile: OtherProfile,
+    showOnlineStatus: Boolean,
+    showAddress: Boolean
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -179,15 +202,17 @@ internal fun NextTripCard(profile: OtherProfile) {
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = stringResource(R.string.other_profile_active_now),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                )
+                if (showOnlineStatus) {
+                    Text(
+                        text = stringResource(R.string.other_profile_active_now),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -220,7 +245,14 @@ internal fun NextTripCard(profile: OtherProfile) {
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
-                        Text(text = stringResource(profile.nextTrip.fromValueRes), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            text = if (showAddress) {
+                                stringResource(profile.nextTrip.fromValueRes)
+                            } else {
+                                stringResource(R.string.other_profile_hidden_value)
+                            },
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                     Column {
                         Text(
@@ -228,7 +260,14 @@ internal fun NextTripCard(profile: OtherProfile) {
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
-                        Text(text = stringResource(profile.nextTrip.toValueRes), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            text = if (showAddress) {
+                                stringResource(profile.nextTrip.toValueRes)
+                            } else {
+                                stringResource(R.string.other_profile_hidden_value)
+                            },
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
                 Column(horizontalAlignment = Alignment.End) {
@@ -246,12 +285,163 @@ internal fun NextTripCard(profile: OtherProfile) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(profile.nextTrip.descriptionRes),
+                text = if (showAddress) {
+                    stringResource(profile.nextTrip.descriptionRes)
+                } else {
+                    stringResource(R.string.other_profile_address_hidden)
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(14.dp))
                     .padding(12.dp)
+            )
+        }
+    }
+}
+
+@Composable
+internal fun ContactInfoCard(profile: OtherProfile) {
+    val visibility = profile.visibility
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.other_profile_contact_info_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            if (visibility.showPhone) {
+                ContactInfoRow(
+                    icon = Icons.Outlined.Phone,
+                    label = stringResource(R.string.other_profile_contact_phone_label),
+                    value = profile.contact.phone
+                )
+            }
+            if (visibility.showEmail) {
+                ContactInfoRow(
+                    icon = Icons.Outlined.Email,
+                    label = stringResource(R.string.other_profile_contact_email_label),
+                    value = profile.contact.email
+                )
+            }
+            if (visibility.showAddress) {
+                ContactInfoRow(
+                    icon = Icons.Outlined.LocationOn,
+                    label = stringResource(R.string.other_profile_contact_location_label),
+                    value = stringResource(profile.contact.cityRes)
+                )
+            }
+            if (visibility.showOnlineStatus) {
+                val statusText = if (profile.contact.isOnline) {
+                    stringResource(R.string.other_profile_status_online)
+                } else {
+                    stringResource(R.string.other_profile_status_offline)
+                }
+                ContactInfoRow(
+                    icon = Icons.Outlined.Wifi,
+                    label = stringResource(R.string.other_profile_contact_status_label),
+                    value = statusText,
+                    valueColor = if (profile.contact.isOnline) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ContactInfoRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    value: String,
+    valueColor: Color? = null
+) {
+    val resolvedColor = valueColor ?: MaterialTheme.colorScheme.onSurface
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = resolvedColor
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun PrivateProfileCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.VisibilityOff,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            Text(
+                text = stringResource(R.string.other_profile_private_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = stringResource(R.string.other_profile_private_subtitle),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -286,7 +476,8 @@ private fun CredentialCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -308,78 +499,86 @@ private fun CredentialCard(
 }
 
 @Composable
-internal fun ReviewsSection(reviews: List<ProfileReview>) {
-    Column(
-        modifier = Modifier.padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+internal fun ReviewsHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.other_profile_reviews_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(R.string.other_profile_reviews_view_all),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-        reviews.forEach { review ->
-            Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        Text(
+            text = stringResource(R.string.other_profile_reviews_title),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = stringResource(R.string.other_profile_reviews_view_all),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+internal fun ReviewCard(review: ProfileReview) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            NetworkImage(
-                                url = review.avatarUrl,
-                                contentDescription = review.name,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Column {
-                                Text(text = review.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                                Row {
-                                    repeat(review.rating) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Star,
-                                            contentDescription = null,
-                                            tint = Color(0xFFFBBF24),
-                                            modifier = Modifier.size(14.dp)
-                                        )
-                                    }
-                                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    NetworkImage(
+                        url = review.avatarUrl,
+                        contentDescription = review.name,
+                        size = 40.dp,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(text = review.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+                        Row {
+                            repeat(review.rating) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Star,
+                                    contentDescription = null,
+                                    tint = Color(0xFFFBBF24),
+                                    modifier = Modifier.size(14.dp)
+                                )
                             }
                         }
-                        Text(
-                            text = stringResource(review.timeRes),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                        )
                     }
-                    Text(
-                        text = stringResource(review.commentRes),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
                 }
+                Text(
+                    text = stringResource(review.timeRes),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
             }
+            Text(
+                text = stringResource(review.commentRes),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
         }
     }
 }
 
 @Composable
-internal fun BoxScope.BottomActionBar(onContact: () -> Unit) {
+internal fun BoxScope.BottomActionBar(
+    onContact: () -> Unit,
+    contactName: String,
+    enabled: Boolean
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -394,9 +593,10 @@ internal fun BoxScope.BottomActionBar(onContact: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         PrimaryButton(
-            text = stringResource(R.string.other_profile_contact_button),
+            text = stringResource(R.string.common_contact_name, contactName),
             onClick = onContact,
             leadingIcon = Icons.Outlined.ChatBubbleOutline,
+            enabled = enabled,
             modifier = Modifier.weight(1f)
         )
         Box(

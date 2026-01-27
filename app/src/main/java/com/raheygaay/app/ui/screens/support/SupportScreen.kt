@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.clickable
@@ -25,15 +27,15 @@ import androidx.compose.material.icons.automirrored.outlined.HelpCenter
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,44 +44,63 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.raheygaay.app.ui.components.InlineNavProgress
 import com.raheygaay.app.ui.components.NetworkImage
+import com.raheygaay.app.ui.components.ErrorState
+import com.raheygaay.app.ui.components.SkeletonBlock
+import com.raheygaay.app.ui.components.SkeletonCircle
+import com.raheygaay.app.BuildConfig
 import com.raheygaay.app.R
 import com.raheygaay.app.data.model.SupportChat
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun SupportScreen(
     onBack: () -> Unit,
-    onOpenChat: () -> Unit,
+    onOpenChat: (String) -> Unit,
+    onOpenHelpCenter: () -> Unit,
+    onSearch: () -> Unit,
+    onNewChat: (String) -> Unit,
+    showSkeleton: Boolean = false,
     viewModel: SupportViewModel = hiltViewModel()
 ) {
     val tabIndex = remember { mutableStateOf(0) }
-    val uiState = viewModel.uiState.collectAsState()
-    val content = uiState.value.content
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val state = uiState.value
+    val content = state.content
+    val scope = rememberCoroutineScope()
+    val showSkeletonState = showSkeleton || (state.isLoading && content == null)
     if (content == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.material3.CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        if (showSkeletonState) {
+            SupportSkeleton()
+        } else {
+            ErrorState(
+                title = stringResource(R.string.error_generic_title),
+                message = stringResource(R.string.error_generic_body),
+                buttonText = stringResource(R.string.error_retry),
+                onRetry = { viewModel.retry() },
+                details = if (BuildConfig.DEBUG) state.errorMessage else null
+            )
         }
         return
     }
 
+    val listState = rememberLazyListState()
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 96.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize(),
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 80.dp, end = 16.dp)
         ) {
             item {
-                SupportHeader(onBack = onBack)
+                SupportHeader(onBack = onBack, onSearch = onSearch)
             }
             item {
-                HelpCenterCard()
+                HelpCenterCard(onClick = onOpenHelpCenter)
             }
             item {
                 Row(
@@ -128,25 +149,48 @@ fun SupportScreen(
                     )
                 }
             }
-            items(content.chats) { chat ->
-                SupportChatCard(chat = chat, onClick = onOpenChat)
+            items(content.chats, key = { it.id }) { chat ->
+                SupportChatCard(
+                    chat = chat,
+                    onClick = {
+                        onOpenChat(chat.id)
+                        if (chat.isSupport) {
+                            scope.launch { viewModel.ensureSupportChat() }
+                        }
+                    }
+                )
             }
         }
-        FloatingActionButton(
-            onClick = {},
+        SmallFloatingActionButton(
+            onClick = {
+                onNewChat("support_team")
+                scope.launch { viewModel.ensureSupportChat() }
+            },
             containerColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 24.dp, bottom = 24.dp)
+                .align(Alignment.BottomEnd)
+                .padding(end = 24.dp, bottom = 24.dp)
         ) {
-            Icon(imageVector = Icons.Outlined.AddComment, contentDescription = null)
+            Icon(
+                imageVector = Icons.Outlined.AddComment,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+        if (showSkeleton) {
+            SupportSkeleton()
         }
     }
 }
 
 @Composable
-private fun SupportHeader(onBack: () -> Unit) {
-    Surface(shadowElevation = 1.dp) {
+private fun SupportSkeleton() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 96.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -154,44 +198,99 @@ private fun SupportHeader(onBack: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                        .clickable { onBack() }
-                        .padding(8.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.support_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Box(
+            SkeletonCircle(size = 40.dp)
+            SkeletonBlock(modifier = Modifier.width(140.dp).height(16.dp))
+            SkeletonCircle(size = 40.dp)
+        }
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(72.dp),
+            shape = RoundedCornerShape(20.dp)
+        )
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(44.dp),
+            shape = RoundedCornerShape(14.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SkeletonBlock(modifier = Modifier.width(160.dp).height(16.dp))
+            SkeletonBlock(modifier = Modifier.width(60.dp).height(22.dp), shape = RoundedCornerShape(10.dp))
+        }
+        repeat(3) {
+            SkeletonBlock(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
-            }
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(84.dp),
+                shape = RoundedCornerShape(22.dp)
+            )
         }
     }
 }
 
 @Composable
-private fun HelpCenterCard() {
+private fun SupportHeader(onBack: () -> Unit, onSearch: () -> Unit) {
+    Surface(shadowElevation = 1.dp) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                            .clickable { onBack() }
+                            .padding(8.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(R.string.support_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                        .clickable { onSearch() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
+                }
+            }
+            InlineNavProgress(modifier = Modifier.padding(horizontal = 20.dp))
+        }
+    }
+}
+
+@Composable
+private fun HelpCenterCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -268,7 +367,8 @@ private fun SupportChatCard(chat: SupportChat, onClick: () -> Unit) {
             .padding(horizontal = 20.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -281,6 +381,7 @@ private fun SupportChatCard(chat: SupportChat, onClick: () -> Unit) {
                 NetworkImage(
                     url = chat.avatarUrl,
                     contentDescription = stringResource(chat.nameRes),
+                    size = 56.dp,
                     modifier = Modifier
                         .size(56.dp)
                         .clip(CircleShape)

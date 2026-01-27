@@ -28,6 +28,11 @@ class HomeViewModel @Inject constructor(
         loadHome()
     }
 
+    fun retry() {
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+        loadHome()
+    }
+
     private fun loadHome() {
         viewModelScope.launch {
             runCatching { repository.getHomeContent() }
@@ -35,7 +40,10 @@ class HomeViewModel @Inject constructor(
                     _uiState.value = HomeUiState(isLoading = false, content = content)
                 }
                 .onFailure {
-                    _uiState.value = HomeUiState(isLoading = false, errorMessage = "home")
+                    _uiState.value = HomeUiState(
+                        isLoading = false,
+                        errorMessage = it.localizedMessage ?: "home"
+                    )
                 }
         }
     }

@@ -27,8 +27,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,6 +65,12 @@ fun AuthScreen(
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
+    var showContent by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        withFrameNanos { }
+        showContent = true
+    }
 
     Column(
         modifier = Modifier
@@ -98,134 +108,138 @@ fun AuthScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
 
-        Card(
-            shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(20.dp)) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
-                        .padding(4.dp)
-                ) {
-                    AuthTab(
-                        title = stringResource(R.string.auth_tab_login),
-                        selected = isLogin.value,
-                        onClick = { isLogin.value = true },
-                        modifier = Modifier.weight(1f)
-                    )
-                    AuthTab(
-                        title = stringResource(R.string.auth_tab_signup),
-                        selected = !isLogin.value,
-                        onClick = { isLogin.value = false },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                if (isLogin.value) {
-                    AuthField(
-                        label = stringResource(R.string.auth_label_email),
-                        placeholder = stringResource(R.string.auth_placeholder_email),
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        icon = Icons.Outlined.Mail,
-                        keyboardType = KeyboardType.Email
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    AuthField(
-                        label = stringResource(R.string.auth_label_password),
-                        placeholder = stringResource(R.string.auth_placeholder_password),
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        icon = Icons.Outlined.Lock,
-                        isPassword = true,
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    )
+        if (showContent) {
+            Card(
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+                            .padding(4.dp)
+                    ) {
+                        AuthTab(
+                            title = stringResource(R.string.auth_tab_login),
+                            selected = isLogin.value,
+                            onClick = { isLogin.value = true },
+                            modifier = Modifier.weight(1f)
+                        )
+                        AuthTab(
+                            title = stringResource(R.string.auth_tab_signup),
+                            selected = !isLogin.value,
+                            onClick = { isLogin.value = false },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
-                    PrimaryButton(
-                        text = stringResource(R.string.auth_button_sign_in),
-                        onClick = {
-                            if (email.value.isBlank() || password.value.isBlank()) {
-                                onGuestLogin()
-                            } else {
-                                onLogin()
-                            }
-                        },
+                    if (isLogin.value) {
+                        AuthField(
+                            label = stringResource(R.string.auth_label_email),
+                            placeholder = stringResource(R.string.auth_placeholder_email),
+                            value = email.value,
+                            onValueChange = { email.value = it },
+                            icon = Icons.Outlined.Mail,
+                            keyboardType = KeyboardType.Email
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AuthField(
+                            label = stringResource(R.string.auth_label_password),
+                            placeholder = stringResource(R.string.auth_placeholder_password),
+                            value = password.value,
+                            onValueChange = { password.value = it },
+                            icon = Icons.Outlined.Lock,
+                            isPassword = true,
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        PrimaryButton(
+                            text = stringResource(R.string.auth_button_sign_in),
+                            onClick = {
+                                if (email.value.isBlank() || password.value.isBlank()) {
+                                    onGuestLogin()
+                                } else {
+                                    onLogin()
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    } else {
+                        AuthField(
+                            label = stringResource(R.string.auth_label_full_name),
+                            placeholder = stringResource(R.string.auth_placeholder_name),
+                            value = name.value,
+                            onValueChange = { name.value = it },
+                            icon = Icons.Outlined.Person
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AuthField(
+                            label = stringResource(R.string.auth_label_email),
+                            placeholder = stringResource(R.string.auth_placeholder_email),
+                            value = email.value,
+                            onValueChange = { email.value = it },
+                            icon = Icons.Outlined.Mail,
+                            keyboardType = KeyboardType.Email
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AuthField(
+                            label = stringResource(R.string.auth_label_create_password),
+                            placeholder = stringResource(R.string.auth_placeholder_password),
+                            value = password.value,
+                            onValueChange = { password.value = it },
+                            icon = Icons.Outlined.Lock,
+                            isPassword = true,
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        PrimaryButton(
+                            text = stringResource(R.string.auth_button_create_account),
+                            onClick = {
+                                if (name.value.isBlank() || email.value.isBlank() || password.value.isBlank()) {
+                                    onGuestLogin()
+                                } else {
+                                    onRegister()
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.auth_or_continue),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
-                } else {
-                    AuthField(
-                        label = stringResource(R.string.auth_label_full_name),
-                        placeholder = stringResource(R.string.auth_placeholder_name),
-                        value = name.value,
-                        onValueChange = { name.value = it },
-                        icon = Icons.Outlined.Person
-                    )
                     Spacer(modifier = Modifier.height(12.dp))
-                    AuthField(
-                        label = stringResource(R.string.auth_label_email),
-                        placeholder = stringResource(R.string.auth_placeholder_email),
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        icon = Icons.Outlined.Mail,
-                        keyboardType = KeyboardType.Email
-                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        SecondaryButton(
+                            text = stringResource(R.string.auth_google),
+                            onClick = {},
+                            modifier = Modifier.weight(1f)
+                        )
+                        SecondaryButton(
+                            text = stringResource(R.string.auth_facebook),
+                            onClick = {},
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
-                    AuthField(
-                        label = stringResource(R.string.auth_label_create_password),
-                        placeholder = stringResource(R.string.auth_placeholder_password),
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        icon = Icons.Outlined.Lock,
-                        isPassword = true,
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    PrimaryButton(
-                        text = stringResource(R.string.auth_button_create_account),
-                        onClick = {
-                            if (name.value.isBlank() || email.value.isBlank() || password.value.isBlank()) {
-                                onGuestLogin()
-                            } else {
-                                onRegister()
-                            }
-                        },
+                    SecondaryButton(
+                        text = stringResource(R.string.auth_guest_button),
+                        onClick = onGuestLogin,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.auth_or_continue),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    SecondaryButton(
-                        text = stringResource(R.string.auth_google),
-                        onClick = {},
-                        modifier = Modifier.weight(1f)
-                    )
-                    SecondaryButton(
-                        text = stringResource(R.string.auth_facebook),
-                        onClick = {},
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                SecondaryButton(
-                    text = stringResource(R.string.auth_guest_button),
-                    onClick = onGuestLogin,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
+        } else {
+            AuthSkeleton()
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
@@ -270,6 +284,42 @@ private fun AuthTab(
         contentAlignment = Alignment.Center
     ) {
         Text(text = title, style = MaterialTheme.typography.labelLarge, color = color)
+    }
+}
+
+@Composable
+private fun AuthSkeleton() {
+    Card(
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+            )
+            repeat(2) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), RoundedCornerShape(16.dp))
+            )
+        }
     }
 }
 
