@@ -79,6 +79,7 @@
     <string name="map_origin_value">القاهرة، مصر</string>
     <string name="map_destination_value">الإسكندرية، مصر</string>
     <string name="map_traveler_description">مسافر للإسكندرية نهاية الأسبوع ويسعدني نقل الطرود الصغيرة أو المستندات. أسافر بالسيارة.</string>
+    <string name="map_loading">جارٍ تحميل بيانات الخريطة...</string>
 
     <!-- Support -->
     <string name="support_title">الدعم والمحادثة</string>

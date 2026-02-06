@@ -22,15 +22,18 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Tune
+import android.graphics.Color as AndroidColor
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,13 +41,17 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.ui.viewinterop.AndroidView
 import com.raheygaay.app.BuildConfig
 import com.raheygaay.app.R
 import com.raheygaay.app.data.model.MapTraveler
+import com.raheygaay.app.data.model.MapPerson
 import com.raheygaay.app.ui.components.AppTextField
 import com.raheygaay.app.ui.components.ErrorState
 import com.raheygaay.app.ui.components.GlassCard
@@ -54,6 +61,31 @@ import com.raheygaay.app.ui.components.SkeletonBlock
 import com.raheygaay.app.ui.theme.BrandMint
 import com.raheygaay.app.ui.theme.primaryGradientBrush
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraBoundsOptions
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.CoordinateBounds
+import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.expressions.generated.Expression.get
+import com.mapbox.maps.extension.style.expressions.generated.Expression.has
+import com.mapbox.maps.extension.style.expressions.generated.Expression.not
+import com.mapbox.maps.extension.style.expressions.generated.Expression.toString
+import com.mapbox.maps.extension.style.layers.generated.circleLayer
+import com.mapbox.maps.extension.style.layers.generated.symbolLayer
+import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
+
+private const val PEOPLE_SOURCE_ID = "people-source"
+private const val CLUSTER_LAYER_ID = "people-clusters"
+private const val CLUSTER_COUNT_LAYER_ID = "people-cluster-count"
+private const val UNCLUSTERED_LAYER_ID = "people-unclustered"
 
 @Composable
 fun MapScreen(
@@ -81,20 +113,20 @@ fun MapScreen(
     }
     val background = MaterialTheme.colorScheme.background
     val isDark = background.luminance() < 0.4f
-    val mapBackground = remember(isDark, background) {
-        val colors = if (isDark) {
-            listOf(Color(0xFF1E293B), Color(0xFF0F172A), background)
-        } else {
-            listOf(Color(0xFFE0F2FE), Color(0xFFF0F9FF), background)
-        }
-        Brush.radialGradient(colors = colors)
+    var mapLoaded by remember { mutableStateOf(false) }
+    LaunchedEffect(isDark) {
+        mapLoaded = false
     }
+    val showLoading = showSkeleton || !mapLoaded
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(mapBackground)
     ) {
-        MapMarkers()
+        EgyptMap(
+            people = content.people,
+            isDark = isDark,
+            onMapLoaded = { mapLoaded = true }
+        )
         Column(modifier = Modifier.fillMaxSize().imePadding()) {
             Spacer(modifier = Modifier.height(12.dp))
             SearchPanel()
@@ -103,8 +135,8 @@ fun MapScreen(
             Spacer(modifier = Modifier.height(12.dp))
             TravelerBottomSheet(traveler = content.traveler, onContact = onContact)
         }
-        if (showSkeleton) {
-            MapSkeleton()
+        if (showLoading) {
+            MapLoadingOverlay()
         }
     }
 }
@@ -144,6 +176,49 @@ private fun MapSkeleton() {
                 shape = RoundedCornerShape(28.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
+        }
+    }
+}
+
+@Composable
+private fun MapLoadingOverlay() {
+    val background = MaterialTheme.colorScheme.background
+    val isDark = background.luminance() < 0.4f
+    val overlayColor = if (isDark) {
+        background.copy(alpha = 0.72f)
+    } else {
+        background.copy(alpha = 0.66f)
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(overlayColor)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SkeletonBlock(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(18.dp),
+                shape = RoundedCornerShape(12.dp)
+            )
+            SkeletonBlock(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(18.dp),
+                shape = RoundedCornerShape(12.dp)
+            )
+            Text(
+                text = stringResource(R.string.map_loading),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
         }
     }
 }
@@ -202,6 +277,151 @@ private fun FloatingActions() {
 }
 
 @Composable
+private fun EgyptMap(
+    people: List<MapPerson>,
+    isDark: Boolean,
+    onMapLoaded: () -> Unit
+) {
+    val mapView = rememberMapViewWithLifecycle()
+    val mapboxMap = remember(mapView) { mapView.getMapboxMap() }
+    val styleUri = if (isDark) Style.DARK else Style.MAPBOX_STREETS
+
+    LaunchedEffect(styleUri) {
+        mapboxMap.loadStyleUri(styleUri) { style ->
+            configureEgyptBounds(mapboxMap)
+            addOrUpdatePeopleSource(style, people)
+            onMapLoaded()
+        }
+    }
+
+    LaunchedEffect(people) {
+        mapboxMap.getStyle()?.let { style ->
+            addOrUpdatePeopleSource(style, people)
+        }
+    }
+
+    AndroidView(
+        factory = { mapView },
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+private fun configureEgyptBounds(mapboxMap: com.mapbox.maps.MapboxMap) {
+    val bounds = CoordinateBounds(
+        Point.fromLngLat(24.0, 22.0),
+        Point.fromLngLat(36.9, 31.8)
+    )
+    mapboxMap.setBounds(
+        CameraBoundsOptions.Builder()
+            .bounds(bounds)
+            .minZoom(4.5)
+            .maxZoom(16.5)
+            .build()
+    )
+    mapboxMap.setCamera(
+        CameraOptions.Builder()
+            .center(Point.fromLngLat(31.2357, 30.0444))
+            .zoom(5.8)
+            .build()
+    )
+}
+
+private fun addOrUpdatePeopleSource(style: Style, people: List<MapPerson>) {
+    val features = people.map { person ->
+        Feature.fromGeometry(Point.fromLngLat(person.longitude, person.latitude)).apply {
+            addStringProperty("id", person.id)
+            addStringProperty("name", person.name)
+        }
+    }
+    val collection = FeatureCollection.fromFeatures(features)
+    val existing = style.getSourceAs<GeoJsonSource>(PEOPLE_SOURCE_ID)
+    if (existing != null) {
+        existing.featureCollection(collection)
+        return
+    }
+
+    val source = geoJsonSource(PEOPLE_SOURCE_ID) {
+        featureCollection(collection)
+        cluster(true)
+        clusterRadius(60)
+        clusterMaxZoom(12)
+    }
+    style.addSource(source)
+
+    if (style.getLayer(CLUSTER_LAYER_ID) == null) {
+        style.addLayer(
+            circleLayer(CLUSTER_LAYER_ID, PEOPLE_SOURCE_ID) {
+                filter(has("point_count"))
+                circleColor(AndroidColor.parseColor("#2563EB"))
+                circleRadius(18.0)
+                circleOpacity(0.85)
+            }
+        )
+    }
+
+    if (style.getLayer(CLUSTER_COUNT_LAYER_ID) == null) {
+        style.addLayer(
+            symbolLayer(CLUSTER_COUNT_LAYER_ID, PEOPLE_SOURCE_ID) {
+                filter(has("point_count"))
+                textField(toString(get("point_count")))
+                textSize(12.0)
+                textColor(AndroidColor.parseColor("#FFFFFF"))
+                textAnchor(TextAnchor.CENTER)
+            }
+        )
+    }
+
+    if (style.getLayer(UNCLUSTERED_LAYER_ID) == null) {
+        style.addLayer(
+            circleLayer(UNCLUSTERED_LAYER_ID, PEOPLE_SOURCE_ID) {
+                filter(not(has("point_count")))
+                circleColor(AndroidColor.parseColor("#10B981"))
+                circleRadius(6.0)
+                circleStrokeColor(AndroidColor.parseColor("#FFFFFF"))
+                circleStrokeWidth(1.4)
+            }
+        )
+    }
+}
+
+@Composable
+private fun rememberMapViewWithLifecycle(): MapView {
+    val context = LocalContext.current
+    val mapView = remember { MapView(context) }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    LaunchedEffect(mapView) {
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(Point.fromLngLat(31.2357, 30.0444))
+                .zoom(5.8)
+                .build()
+        )
+    }
+
+    androidx.compose.runtime.DisposableEffect(lifecycle, mapView) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                androidx.lifecycle.Lifecycle.Event.ON_START -> mapView.onStart()
+                androidx.lifecycle.Lifecycle.Event.ON_STOP -> mapView.onStop()
+                androidx.lifecycle.Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+                androidx.lifecycle.Lifecycle.Event.ON_RESUME -> mapView.onResume()
+                androidx.lifecycle.Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+                else -> Unit
+            }
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+            mapView.onStop()
+            mapView.onDestroy()
+        }
+    }
+
+    return mapView
+}
+
+@Composable
 private fun FloatingActionIcon(icon: androidx.compose.ui.graphics.vector.ImageVector) {
     Box(
         modifier = Modifier
@@ -215,73 +435,6 @@ private fun FloatingActionIcon(icon: androidx.compose.ui.graphics.vector.ImageVe
     }
 }
 
-@Composable
-private fun MapMarkers() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        MapMarker(
-            name = stringResource(R.string.name_ahmed_short),
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAN1--rX42ZmAXJx4xQ2D6RGAOtIoQ6M00uB-S5zzGNx5ukfMABjExx1jo1OWVH-tN5q8X7YqFv-uqvUfCd1kzalzi8pNEPxv0uxd16-00MMbbvAx4588vghbA1hLoaM9us0gIGj6e7sTVr3a8LWHpIGc-B77CdmiqVBj6x4VpfGnDdbU_Yh17T2EbptM6tAxNhBTPpn-0zc5p7dOxBHpKaLuW6Hd1wdsx8d_AUzp2jokJ1cA5os1HPCw6sTQ8xxXfeBYvWJHpe7YA",
-            modifier = Modifier.align(Alignment.Center)
-        )
-        MapMarker(
-            name = stringResource(R.string.name_fatma_hassan),
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuDowgytZp4ZOt9kILiGO6Txwj3SO-360c7EREfn2LfFh_0z1ZxLsonbKHN7Jm-nFlme0_hk0VIPgTb9u84AtRxRzphcjBcOEEIfZ33KzV_k81uEsZOfpfdFGRIFN5Bz3ICJsvmZ9nKZ2uYUdu1940aMmeEcpuurMmm_hwdhtlaZHtGRWvFOpo_tJgEDXjltjXa34oSKk0tr5x-kF0JTB7boX9XSfNBnq0a2scdwmRE9RPlCs6gizQKiYSTjtaCjZ7WzAcNwwgg-_d0",
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 140.dp, end = 90.dp)
-        )
-        MapMarker(
-            name = stringResource(R.string.name_omar_mostafa),
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAc02jS639Sp0JH9EXXN8TjkCXy7ahFArxG6Y87KjhGuxRGwn5JtA_RAtSTwdS-IZ6jzzD-KcndkfGD4oX-jNqfCjF22qh8Q7FE6909ZVYTnRKmgy0hHJ3-T__cT-CkYfdcjjJKhYJdN0XxZYWOMUOTBSQ7gZ6TjkSgBcvTkGTb0aLlhywCSi7w0mK__jn5MeJRhN-uwRP4N31_flp_Fs6SnC9HH1ry969mgy4TNuHohdc69As5JpzNKMGUcc5gCN6BytWJjKkQ_Dk",
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 240.dp, start = 80.dp)
-        )
-        Box(
-            modifier = Modifier
-                .size(16.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF3B82F6))
-                .align(Alignment.CenterEnd)
-                .padding(end = 90.dp)
-        )
-    }
-}
-
-@Composable
-private fun MapMarker(
-    name: String,
-    imageUrl: String,
-    modifier: Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(52.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(3.dp)
-        ) {
-            NetworkImage(
-                url = imageUrl,
-                contentDescription = name,
-                size = 46.dp,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape)
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = name,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
 
 @Composable
 private fun TravelerBottomSheet(

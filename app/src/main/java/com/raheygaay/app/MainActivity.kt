@@ -8,13 +8,18 @@ import androidx.compose.ui.Modifier
 import androidx.appcompat.app.AppCompatActivity
 import com.raheygaay.app.ui.AppRoot
 import com.raheygaay.app.ui.rememberAppState
+import com.raheygaay.app.ui.performance.PerformanceTracker
 import com.raheygaay.app.ui.theme.RaheyGaayTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var performanceTracker: PerformanceTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        performanceTracker = PerformanceTracker.create(window)
+        lifecycle.addObserver(performanceTracker)
         setContent {
             val appState = rememberAppState()
             RaheyGaayTheme(
@@ -22,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 isArabic = appState.isArabic
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    AppRoot(appState = appState)
+                    AppRoot(appState = appState, performanceTracker = performanceTracker)
                 }
             }
         }

@@ -32,9 +32,11 @@ android {
 
         val appName = properties.getProperty("APP_NAME", "Rahey-Gaay").trim().trim('"')
         val appLogo = properties.getProperty("APP_LOGO", "app_logo").trim().trim('"')
+        val mapboxToken = properties.getProperty("MAPBOX_TOKEN", "").trim().trim('"')
 
         buildConfigField("String", "APP_NAME", "\"$appName\"")
         buildConfigField("String", "APP_LOGO", "\"$appLogo\"")
+        buildConfigField("String", "MAPBOX_TOKEN", "\"$mapboxToken\"")
     }
 
     buildTypes {
@@ -126,6 +128,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Mapbox
+    implementation("com.mapbox.maps:android:10.17.0")
+
+    // Performance
+    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
+    implementation("androidx.tracing:tracing-ktx:1.2.0")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 

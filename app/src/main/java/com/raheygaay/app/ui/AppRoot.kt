@@ -51,13 +51,14 @@ import com.raheygaay.app.ui.components.StreakPopup
 import com.raheygaay.app.ui.streak.StreakViewModel
 import com.raheygaay.app.ui.preferences.UserPreferencesViewModel
 import com.raheygaay.app.ui.performance.PerformanceViewModel
+import com.raheygaay.app.ui.performance.PerformanceTracker
 import kotlinx.coroutines.delay
 
-private const val NAV_SKELETON_MIN_MS_DEFAULT = 1000L
+private const val NAV_SKELETON_MIN_MS_DEFAULT = 300L
 private const val NAV_SKELETON_MIN_MS_AUTH = 120L
 
 @Composable
-fun AppRoot(appState: AppState) {
+fun AppRoot(appState: AppState, performanceTracker: PerformanceTracker? = null) {
     val navController = appState.navController
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -78,16 +79,25 @@ fun AppRoot(appState: AppState) {
     var navSkeletonTarget by remember { mutableStateOf<String?>(null) }
     var navSkeletonStart by remember { mutableStateOf(0L) }
     var pendingNavigation by remember { mutableStateOf<PendingNavigation?>(null) }
+    LaunchedEffect(currentRoute) {
+        val route = currentRoute ?: return@LaunchedEffect
+        val routeKey = resolveRouteKey(route)
+        performanceTracker?.onScreenStart(routeKey)
+        withFrameNanos { }
+        performanceTracker?.onScreenFirstFrame(routeKey)
+    }
     LaunchedEffect(appState.isArabic) {
         val localeTag = if (appState.isArabic) "ar" else "en"
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(localeTag))
     }
     LaunchedEffect(Unit) {
+        withFrameNanos { }
         performanceViewModel.recordAppOpen()
     }
     LaunchedEffect(streakOwnerKey) {
         streakViewModel.setOwnerKey(streakOwnerKey)
         if (streakOwnerKey != null) {
+            withFrameNanos { }
             streakViewModel.onAppOpened()
         }
     }
@@ -137,15 +147,6 @@ fun AppRoot(appState: AppState) {
         }
         pendingNavigation = null
     }
-    fun resolveRouteKey(route: String): String {
-        return when {
-            route.startsWith("chat/") -> AppRoute.Chat.route
-            route.startsWith("other_profile/") -> AppRoute.OtherProfile.route
-            route.startsWith("info/") -> AppRoute.Info.route
-            else -> route
-        }
-    }
-
     fun startNavSkeleton(targetKey: String) {
         navSkeletonTarget = targetKey
         navSkeletonStart = SystemClock.elapsedRealtime()
@@ -441,6 +442,15 @@ fun AppRoot(appState: AppState) {
         if (streakOwnerKey != null && popupVisible.value) {
             StreakPopup(state = streakState.value, onDismiss = { streakViewModel.dismissPopup() })
         }
+    }
+}
+
+private fun resolveRouteKey(route: String): String {
+    return when {
+        route.startsWith("chat/") -> AppRoute.Chat.route
+        route.startsWith("other_profile/") -> AppRoute.OtherProfile.route
+        route.startsWith("info/") -> AppRoute.Info.route
+        else -> route
     }
 }
 

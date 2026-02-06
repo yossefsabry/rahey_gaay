@@ -80,7 +80,9 @@ object DataModule {
     @Provides
     @Singleton
     @Named("mockMap")
-    fun provideMockMapDataSource(): MapDataSource = MockMapDataSource()
+    fun provideMockMapDataSource(
+        @dagger.hilt.android.qualifiers.ApplicationContext context: android.content.Context
+    ): MapDataSource = MockMapDataSource(context)
 
     @Provides
     @Singleton

@@ -20,6 +20,7 @@ LAUNCH_COMPONENT="$PACKAGE_NAME/.MainActivity"
 # Flags
 BUILD_ONLY=false
 CLEAN_INSTALL=false
+DEBUG_LOGCAT=false
 GRADLE_FLAGS=()
 for arg in "$@"; do
     case "$arg" in
@@ -29,12 +30,15 @@ for arg in "$@"; do
         --clean-install)
             CLEAN_INSTALL=true
             ;;
+        --debug)
+            DEBUG_LOGCAT=true
+            ;;
         --offline)
             GRADLE_FLAGS+=("--offline")
             ;;
         *)
             echo -e "${YELLOW}Unknown argument: $arg${NC}"
-            echo "Usage: ./dev.sh [--build-only] [--clean-install] [--offline]"
+            echo "Usage: ./dev.sh [--build-only] [--clean-install] [--debug] [--offline]"
             exit 1
             ;;
     esac
@@ -83,6 +87,11 @@ if [ $? -eq 0 ]; then
 
         echo -e "${GREEN}✨ App is running on your emulator!${NC}"
         echo "Note: Unlike Expo, 'Hot Reload' requires Android Studio. To see changes, run this script again."
+        if [ "$DEBUG_LOGCAT" = true ]; then
+            echo -e "${BLUE}🧪 Streaming PerformanceTracker logs...${NC}"
+            echo "Press Ctrl+C to stop logcat."
+            adb logcat -v time -s "PerformanceTracker:V" "*:S"
+        fi
     else
         echo -e "${GREEN}✨ Build-only complete.${NC}"
     fi

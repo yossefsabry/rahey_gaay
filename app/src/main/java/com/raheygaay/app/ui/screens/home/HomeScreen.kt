@@ -18,7 +18,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.withFrameNanos
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,6 +82,13 @@ fun HomeScreen(
         }
         return
     }
+    val showFullContentState = remember(content) { mutableStateOf(false) }
+    LaunchedEffect(content) {
+        if (!showFullContentState.value) {
+            withFrameNanos { }
+            showFullContentState.value = true
+        }
+    }
     val listState = rememberLazyListState()
     val background = MaterialTheme.colorScheme.background
     val primary = MaterialTheme.colorScheme.primary
@@ -131,68 +141,106 @@ fun HomeScreen(
             item {
                 HeroSection(onSearch = onSearch)
             }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                FeatureSection(features = content.features)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                DiscoverSection(appName = appName, onExplore = onSearch)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                StatsSection(stats = content.stats)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                LiveConnectionsSection(connections = content.liveConnections)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                FeaturedTravelersHeader()
-            }
-            items(
-                items = content.travelers,
-                key = { it.id },
-                contentType = { "featured_traveler" }
-            ) { traveler ->
-                FeaturedTravelerItem(
-                    traveler = traveler,
-                    onContact = onContactTraveler
-                )
-            }
-            item {
-                FeaturedTravelersFooter(onSeeAll = onSeeAllTravelers)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                HowItWorksSection(appName = appName, steps = content.steps)
-            }
-            item {
-                Spacer(modifier = Modifier.height(sectionSpacing))
-            }
-            item {
-                WhyChooseSection(appName = appName, reasons = content.reasons)
-            }
-            item {
-                Spacer(modifier = Modifier.height(96.dp))
+            if (showFullContentState.value) {
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    FeatureSection(features = content.features)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    DiscoverSection(appName = appName, onExplore = onSearch)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    StatsSection(stats = content.stats)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    LiveConnectionsSection(connections = content.liveConnections)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    FeaturedTravelersHeader()
+                }
+                items(
+                    items = content.travelers,
+                    key = { it.id },
+                    contentType = { "featured_traveler" }
+                ) { traveler ->
+                    FeaturedTravelerItem(
+                        traveler = traveler,
+                        onContact = onContactTraveler
+                    )
+                }
+                item {
+                    FeaturedTravelersFooter(onSeeAll = onSeeAllTravelers)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    HowItWorksSection(appName = appName, steps = content.steps)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    WhyChooseSection(appName = appName, reasons = content.reasons)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(96.dp))
+                }
+            } else {
+                item {
+                    Spacer(modifier = Modifier.height(sectionSpacing))
+                }
+                item {
+                    HomeDeferredPlaceholder()
+                }
             }
         }
         if (showSkeleton) {
             HomeSkeleton()
         }
+    }
+}
+
+@Composable
+private fun HomeDeferredPlaceholder() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp),
+            shape = MaterialTheme.shapes.extraLarge
+        )
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp),
+            shape = MaterialTheme.shapes.extraLarge
+        )
+        SkeletonBlock(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp),
+            shape = MaterialTheme.shapes.extraLarge
+        )
     }
 }
 

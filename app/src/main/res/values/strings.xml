@@ -79,6 +79,7 @@
     <string name="map_origin_value">Cairo, EG</string>
     <string name="map_destination_value">Alexandria, EG</string>
     <string name="map_traveler_description">Friendly guy heading to Alex for the weekend. Happy to help with small packages or documents! Traveling by car.</string>
+    <string name="map_loading">Loading map data...</string>
 
     <!-- Support -->
     <string name="support_title">Support &amp; Chat</string>
