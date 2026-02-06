@@ -131,6 +131,7 @@ dependencies {
 
     // Mapbox
     implementation("com.mapbox.maps:android:10.17.0")
+    implementation("com.mapbox.extension:maps-style:10.17.0")
 
     // Performance
     implementation("androidx.metrics:metrics-performance:1.0.0-beta01")

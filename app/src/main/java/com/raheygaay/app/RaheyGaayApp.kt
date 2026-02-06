@@ -2,7 +2,7 @@ package com.raheygaay.app
 
 import android.app.Application
 import android.util.Log
-import com.mapbox.maps.MapboxOptions
+import com.mapbox.maps.ResourceOptionsManager
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -13,7 +13,7 @@ class RaheyGaayApp : Application() {
         if (token.isBlank()) {
             Log.w("RaheyGaayApp", "MAPBOX_TOKEN is missing. Add it to .env.")
         } else {
-            MapboxOptions.accessToken = token
+            ResourceOptionsManager.getDefault(this, token)
         }
     }
 }

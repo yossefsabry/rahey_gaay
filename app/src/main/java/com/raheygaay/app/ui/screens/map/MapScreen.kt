@@ -71,13 +71,13 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.CoordinateBounds
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import com.mapbox.maps.extension.style.expressions.generated.Expression.get
-import com.mapbox.maps.extension.style.expressions.generated.Expression.has
-import com.mapbox.maps.extension.style.expressions.generated.Expression.not
-import com.mapbox.maps.extension.style.expressions.generated.Expression.toString
+import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.mapbox.maps.extension.style.layers.addLayer
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.generated.circleLayer
 import com.mapbox.maps.extension.style.layers.generated.symbolLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor
+import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.extension.style.sources.getSourceAs
@@ -351,7 +351,7 @@ private fun addOrUpdatePeopleSource(style: Style, people: List<MapPerson>) {
     if (style.getLayer(CLUSTER_LAYER_ID) == null) {
         style.addLayer(
             circleLayer(CLUSTER_LAYER_ID, PEOPLE_SOURCE_ID) {
-                filter(has("point_count"))
+                filter(Expression.has("point_count"))
                 circleColor(AndroidColor.parseColor("#2563EB"))
                 circleRadius(18.0)
                 circleOpacity(0.85)
@@ -362,8 +362,8 @@ private fun addOrUpdatePeopleSource(style: Style, people: List<MapPerson>) {
     if (style.getLayer(CLUSTER_COUNT_LAYER_ID) == null) {
         style.addLayer(
             symbolLayer(CLUSTER_COUNT_LAYER_ID, PEOPLE_SOURCE_ID) {
-                filter(has("point_count"))
-                textField(toString(get("point_count")))
+                filter(Expression.has("point_count"))
+                textField(Expression.toString(Expression.get("point_count")))
                 textSize(12.0)
                 textColor(AndroidColor.parseColor("#FFFFFF"))
                 textAnchor(TextAnchor.CENTER)
@@ -374,7 +374,7 @@ private fun addOrUpdatePeopleSource(style: Style, people: List<MapPerson>) {
     if (style.getLayer(UNCLUSTERED_LAYER_ID) == null) {
         style.addLayer(
             circleLayer(UNCLUSTERED_LAYER_ID, PEOPLE_SOURCE_ID) {
-                filter(not(has("point_count")))
+                filter(Expression.not(Expression.has("point_count")))
                 circleColor(AndroidColor.parseColor("#10B981"))
                 circleRadius(6.0)
                 circleStrokeColor(AndroidColor.parseColor("#FFFFFF"))
@@ -405,8 +405,6 @@ private fun rememberMapViewWithLifecycle(): MapView {
                 androidx.lifecycle.Lifecycle.Event.ON_START -> mapView.onStart()
                 androidx.lifecycle.Lifecycle.Event.ON_STOP -> mapView.onStop()
                 androidx.lifecycle.Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
-                androidx.lifecycle.Lifecycle.Event.ON_RESUME -> mapView.onResume()
-                androidx.lifecycle.Lifecycle.Event.ON_PAUSE -> mapView.onPause()
                 else -> Unit
             }
         }
